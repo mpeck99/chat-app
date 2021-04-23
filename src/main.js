@@ -12,7 +12,8 @@ const router = new VueRouter({
   routes: [{
     path: '/chat',
     name: 'Chat',
-    component: Chat
+    component: Chat, 
+    props: true
   }, {
     path: '/',
     name: 'Home',
