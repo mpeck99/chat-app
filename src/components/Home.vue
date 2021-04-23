@@ -2,18 +2,18 @@
   <div class="wrapper">
       <h1>Chat</h1>
       <p>Welcome to my chat app. Please enter your name and select which user type you are and hit connect to enter a chat.</p>
-      <ul v-for="(error, index) in errorMsgs" :key="index" class="errors">
-          <li>{{error}}</li>
+      <ul class="errors">
+          <li v-for="(error, index) in errorMsgs" :key="index">{{error}}</li>
       </ul>
       <form action="">
-          <div class="form-item">
+          <div class="form-group">
               <label for="name">Name:</label>
               <input type="text" name="name" id="name">
           </div>
-          <fieldset class="form-item">
+          <fieldset class="fieldset">
               <legend>User type</legend>
-              <label for="agent">Agent <input type="radio" name="type" id="agent" value="agent"></label>
-              <label for="customer">Customer <input type="radio" name="type" id="customer" value="customer"></label>             
+              <label for="agent"><input type="radio" name="type" id="agent" value="agent">Agent</label>
+              <label for="customer"><input type="radio" name="type" id="customer" value="customer">Customer</label>             
           </fieldset>
           <input type="button" value="Connect" @click="storeData" class="btn">
       </form>
@@ -69,6 +69,22 @@ input[type="button"] {
 }
 
 .errors {
+    padding-left: 0;
+
     list-style-type: none;
+
+    color: var(--red);
 }
+
+.errors li {
+    margin-bottom: 0.5rem;
+}
+
+.fieldset {
+    padding-left: 0;
+    margin-left: 0;
+
+    border: none;
+}
+
 </style>
