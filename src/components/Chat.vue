@@ -1,63 +1,72 @@
 <template>
-    <div class="card mt-3">
-      <div class="card-body">
-          <div class="card-title">
-              <h3>Chat Group</h3>
-              <hr>
-          </div>
-          <div class="card-body">
-              <div class="messages" v-for="(msg, index) in messages" :key="index">
-                  <p><span class="font-weight-bold">{{ msg.user }}: </span>{{ msg.message }}</p>
-              </div>
-          </div>
-      </div>
-      <div class="card-footer">
-          <form @submit.prevent="sendMessage">
-              <div class="gorm-group">
-                  <label for="user">User:</label>
-                  <input type="text" v-model="user" class="form-control">
-              </div>
-              <div class="gorm-group pb-3">
-                  <label for="message">Message:</label>
-                  <input type="text" v-model="message" class="form-control">
-              </div>
-              <button type="submit" class="btn btn-success">Send</button>
-          </form>
-      </div>
-  </div>
+    <div class="wrapper">
+        <div class="chat-wrapper" v-for="(msg, index) in messages" :key="index">
+            <div class="chat-bubble" :class="bubbleClass"><p>{{msg.message}}</p></div>
+        </div>
+        <form @submit.prevent="sendMessage">
+            <label for="message">Message:</label>
+            <input type="text" v-model="message" class="form-control">
+            <button type="submit" class="btn btn-success">Send</button>
+        </form>
+    </div>
+
 </template>
 
 <script>
 import io from 'socket.io-client';
 
 export default {
-    props: ['data'],
+    props: ['name', 'userType'],
     data() {
         return {
-            user: '',
+            username: "",
+            type: "",
             message: '',
             messages: [],
+            bubbleClass:"",
             socket : io('localhost:3000')
         }
     },
     methods: {
         sendMessage(e) {
             e.preventDefault();
-            
+
             this.socket.emit('SEND_MESSAGE', {
-                user: this.user,
-                message: this.message
+                user: this.type,
+                message: this.message,
+
+                
             });
             this.message = ''
-            console.log(this.data.name)
+            
         }
     },
-    mounted() {
-        this.socket.on('MESSAGE', (data) => {
-            
-            this.messages = [...this.messages, data];
-            // you can also do this.messages.push(data)
+    created(){
+        this.username = this.$route.params.data.name;
+        this.type = this.$route.params.data.type;
+
+        this.socket.on('MESSAGE', (data)=>{
+            if(this.type == "agent"){
+                console.log('agent');
+            }
+            else {
+                console.log('nonagent')
+            }
+            this.messages.push({
+                message: data, 
+                user: this.type,
+            })
         });
+    },
+    mounted() {
+    //     this.socket.on('MESSAGE', (data) => {
+            
+    //         this.messages = [...this.messages, data];
+    //         // you can also do this.messages.push(data)
+    //     });
+    //     this.socket.on('connect', ()=>{
+    //         console.log(this.data.name+'connected')
+    //     });
     }
 }
 </script>
