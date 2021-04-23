@@ -1,8 +1,5 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -13,14 +10,27 @@ export default {
   }
 }
 </script>
-
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+:root {
+  --body-font: 'Roboto', sans-serif;
+  --header-font: 'Oswald', sans-serif;
+}
+
+body, html {
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6, label, legend {
+  font-family: var(--header-font);
+}
+
+p, ul, ol, a, input, .btn{
+  font-family: var(--body-font);
+}
+
+.wrapper {
+  max-width: 1200px;
+
+  margin: 0 auto;
 }
 </style>
