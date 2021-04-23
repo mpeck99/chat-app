@@ -2,6 +2,9 @@
   <div class="wrapper">
       <h1>Chat</h1>
       <p>Welcome to my chat app. Please enter your name and select which user type you are and hit connect to enter a chat.</p>
+      <ul v-for="(error, index) in errorMsgs" :key="index" class="errors">
+          <li>{{error}}</li>
+      </ul>
       <form action="">
           <div class="form-item">
               <label for="name">Name:</label>
@@ -12,7 +15,7 @@
               <label for="agent">Agent <input type="radio" name="type" id="agent" value="agent"></label>
               <label for="customer">Customer <input type="radio" name="type" id="customer" value="customer"></label>             
           </fieldset>
-          <input type="button" value="Connect" @click="storeData">
+          <input type="button" value="Connect" @click="storeData" class="btn">
       </form>
   </div>
 </template>
@@ -23,7 +26,7 @@ export default {
      return{
          name: '',
          userType: '', 
-         errorMsg: [],
+         errorMsgs: [],
      }
  }, 
 
@@ -31,9 +34,9 @@ export default {
         storeData(){
             const name = document.querySelector('#name').value;
             const userType = document.querySelector('input[name="type"]:checked')
-            
+            this.errorMsgs =[];
             if(name === null || name === undefined || name ==="" || name ===" "){
-                this.errorMsg.push('Please enter a name');
+                this.errorMsgs.push('Please enter a name');
             }
         
             else {
@@ -44,20 +47,17 @@ export default {
                 this.userType = userType.value;
             }
             else {
-                this.errorMsg.push('Please select a user type.')
-                console.log(this.errorMsg);
+                this.errorMsgs.push('Please select a user type.')
             }
             
-            if(this.errorMsg.length == 0){
+            if(this.errorMsgs.length == 0){
                 this.$router.push({name: 'Chat', params: {
                     data: {
-                        'name': this.name,
-                        'type': this.userType
+                        name: this.name,
+                        type: this.userType
                     }
                 }});
             }
-
-            this.errorMsg = [];
         }
     }
 }
@@ -66,6 +66,9 @@ export default {
 <style>
 input[type="button"] {
     margin: 1rem;
+}
 
+.errors {
+    list-style-type: none;
 }
 </style>
