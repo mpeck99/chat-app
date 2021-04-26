@@ -10,7 +10,7 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="scss">
 :root {
   --body-font: 'Roboto', sans-serif;
   --header-font: 'Oswald', sans-serif;
@@ -23,38 +23,49 @@ export default {
 }
 
 body, html {
+  height: 100%;
+
+  margin: 0;
+
   font-size: 16px;
 
   color: var(--black);
+
+  box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6, label, legend {
   font-family: var(--header-font);
 }
 
-legend, label {
-  padding-left: 0;
-
-  font-size: 1.25rem;
+h1 {
+  font-size: 2.5rem;
 }
 
-input {
-  margin: 0 0.5rem;
+label, legend {
+  font-size: 1.5rem;
 }
 
-.form-group {
-  display: flex;
-
-  align-items: center;
-}
-
-p, ul, ol, a, input, .btn{
+p, ul, ol, a, input, select, .btn{
   font-family: var(--body-font);
 }
 
 .wrapper {
   max-width: 1200px;
+  min-height: calc(100% - 4rem);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
 
   margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.wrapper h1 {
+  margin-top: 0;
 }
 </style>
