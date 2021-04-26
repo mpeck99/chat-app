@@ -60,6 +60,14 @@ export default {
       }
 
       if (this.errorMsgs.length == 0) {
+        //    let routeData = this.$router.resolve({name: 'Chat', params: {
+        //   data:{
+        //     name: this.name,
+        //     type: this.userType
+        //   }
+        // }}); //path: the relative path of the jump page, 
+        // window.open(routeData.href, '_blank', 'location=0, height=600, width=200');
+ 
         this.$router.push({
           name: "Chat",
           params: {

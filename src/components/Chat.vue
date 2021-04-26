@@ -61,14 +61,14 @@ export default {
         });
     },
     mounted() {
-    //     this.socket.on('MESSAGE', (data) => {
+        // this.socket.on('MESSAGE', (data) => {
             
-    //         this.messages = [...this.messages, data];
-    //         // you can also do this.messages.push(data)
-    //     });
-    //     this.socket.on('connect', ()=>{
-    //         console.log(this.data.name+'connected')
-    //     });
+        //     this.messages = [...this.messages, data];
+        //     // you can also do this.messages.push(data)
+        // });
+        // this.socket.on('connect', ()=>{
+        //     console.log(this.data.name+'connected')
+        // });
     }
 }
 </script>
