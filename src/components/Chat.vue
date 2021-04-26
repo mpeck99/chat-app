@@ -1,13 +1,15 @@
 <template>
     <div class="wrapper">
-        <div class="chat-wrapper" v-for="(msg, index) in messages" :key="index">
-            <div class="chat-bubble" :class="bubbleClass"><p>{{msg.message}}</p></div>
+        <div class="chat-bubbles">
+            <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="bubbleClass"><p>{{msg.message}}</p></div>
         </div>
-        <form @submit.prevent="sendMessage">
-            <label for="message">Message:</label>
-            <input type="text" v-model="message" class="form-control">
-            <button type="submit" class="btn btn-success">Send</button>
-        </form>
+        <div class="form-wrapper">
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <input type="text" v-model="message" class="form-control">
+            </div>
+            <input type="submit" class="btn" value="Send" @click="sendMessage"/> 
+        </div>
     </div>
 
 </template>
