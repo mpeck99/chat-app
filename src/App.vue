@@ -24,6 +24,11 @@ export default {
 
 body, html {
   height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   margin: 0;
 
@@ -32,6 +37,9 @@ body, html {
   color: var(--black);
 
   box-sizing: border-box;
+  background-color: var(--blue);
+
+
 }
 
 h1, h2, h3, h4, h5, h6, label, legend {
@@ -51,21 +59,25 @@ p, ul, ol, a, input, select, .btn{
 }
 
 .wrapper {
-  max-width: 1200px;
-  min-height: calc(100% - 4rem);
+  max-width: 500px;
+  width: 100%;
+
+  min-height: 75%;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content:  center;
 
   position: relative;
 
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
+  padding: 1.5rem;
 
-.wrapper h1 {
-  margin-top: 0;
+  line-height: 1.75rem;
+
+  background: #fff;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+
+  overflow-x: hidden;
 }
 </style>
