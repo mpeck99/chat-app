@@ -67,7 +67,7 @@ p, ul, ol, a, input, select, .btn{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content:  center;
+  justify-content:  space-around;
 
   position: relative;
 
@@ -77,6 +77,8 @@ p, ul, ol, a, input, select, .btn{
 
   background: #fff;
   box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+
+  text-align: center;
 
   overflow-x: hidden;
 }
