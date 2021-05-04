@@ -18,14 +18,17 @@
         <select name="type" id="type">
           <option value="Select user type">Select user type</option>
           <option value="agent">Agent</option>
-          <option value="customer">Customer</option>
+          <option value="client">Client</option>
         </select>
-      </div>  
-    
+      </div>
+      <div class="error-wrapper" v-if="errorMsgs[0]" >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <ul class="errors">
+          <li v-for="(error, index) in errorMsgs" :key="index">{{ error }}</li>
+        </ul>
+      </div>
+
     </div> 
-    <ul v-if="errorMsgs[0]" class="errors">
-        <li v-for="(error, index) in errorMsgs" :key="index">{{ error }}</li>
-    </ul>
     <input type="submit" value="Chat" @click="storeData" class="btn" />
   </div>
 </template>
@@ -60,13 +63,6 @@ export default {
       }
 
       if (this.errorMsgs.length == 0) {
-        //    let routeData = this.$router.resolve({name: 'Chat', params: {
-        //   data:{
-        //     name: this.name,
-        //     type: this.userType
-        //   }
-        // }}); //path: the relative path of the jump page, 
-        // window.open(routeData.href, '_blank', 'location=0, height=600, width=200');
  
         this.$router.push({
           name: "Chat",
@@ -104,21 +100,36 @@ export default {
     stroke: #fff;
 }
 
-.errors {
-  width: calc(100% - 2rem);
+.error-wrapper {
+  width: calc(100% - 3.5rem);
+  height: 4.5rem;
+
+  display: flex;
+  align-items: center;
 
   position: absolute;
-  bottom: -5rem;
+  bottom: -4.25rem;
 
-  padding: 1rem;
-
-  list-style-type: none;
+  padding: 0.25rem;
 
   color: darken(#c14b46, 10%);
   text-align: left;
 
   background-color: lighten(#c14b46, 35%);
   border-radius: 0.25rem;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+
+    margin: 0 1rem;
+  }
+
+  ul {
+    padding-left: 0;
+
+    list-style-type: none;
+  }
 }
 
 .form-wrapper {
@@ -139,7 +150,7 @@ export default {
     
     position: relative;
 
-    margin: 2.5rem 0;
+    margin: 1.75rem 0;
 
     label {
         position: absolute;
@@ -150,6 +161,8 @@ export default {
         height: 2.5rem;
 
         flex-grow: 1;
+
+        border-radius: 0;
     }
 
     select {
@@ -165,10 +178,10 @@ export default {
     align-self: flex-end;
 
     padding: 1rem;
+    margin-top: 6rem;
 
     border: none;
     background-color: var(--blue);
-    border-radius: 0.25rem;
 
     color: var(--grey);
     font-weight: 700;
