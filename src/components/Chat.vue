@@ -1,7 +1,9 @@
 <template>
     <div class="wrapper wrapper-chat">
-        <div class="chat-bubbles">
-            <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="msg.message.class"><p>{{msg.message}}</p></div>
+        <div class="inner">
+            <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="msg.message.class">
+                <span class="name">{{msg.message.name}}</span>
+                <p>{{msg.message.message}}</p></div>
         </div>
         <div class="form-wrapper">
             <div class="form-group">
@@ -38,19 +40,19 @@ export default {
                 user: this.type,
                 message: this.message,
                 class: this.bubbleClass,
+                name: this.username
             });
             this.message = ''
-            
         }
     },
     created(){
         this.username = this.$route.params.data.name;
         this.type = this.$route.params.data.type;
     if(this.type == "agent"){
-                this.bubbleClass = 'chatbubble--agent';
+                this.bubbleClass = 'chat-bubble--agent';
             }
             else {
-                this.bubbleClass='chatbubble--client';
+                this.bubbleClass='chat-bubble--client';
             }
         this.socket.on('MESSAGE', (data)=>{
            
@@ -58,18 +60,13 @@ export default {
                 message: data, 
                 user: this.type,
                 class: this.bubbleClass
-            })
+            });
+
         });
-    },
-    mounted() {
-        // this.socket.on('MESSAGE', (data) => {
-            
-        //     this.messages = [...this.messages, data];
-        //     // you can also do this.messages.push(data)
-        // });
-        // this.socket.on('connect', ()=>{
-        //     console.log(this.data.name+'connected')
-        // });
+
+         this.socket.on('connect', ()=>{
+            console.log(this.type+' connected')
+        });
     }
 }
 </script>
@@ -81,9 +78,11 @@ export default {
 
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr 5rem;
 
     .form-wrapper {
+        height: 100%;
+
         flex-direction: row;
         justify-content: center;
         align-items: flex-end;
@@ -107,6 +106,87 @@ export default {
 
             border-radius: 0;
         }
+    }
+}
+
+.inner {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.chat-bubble {
+    max-width: 45%;
+    min-width: 4rem;
+
+    padding: 0.5rem 1rem;
+    margin: 2rem 0;
+
+    position: relative;
+
+    background: var(--grey);
+
+    p {
+        max-width: 100%;
+
+        margin: 0;
+
+        word-break: break-all;
+        text-align: right;
+    }
+
+    .name {
+        position: absolute;
+        bottom: -1.5rem;
+        right: 0;
+
+        font-size: 0.9rem;
+        text-transform: capitalize;
+        font-family: var(--header-font);
+    }
+
+    &:after {
+        content: '';
+
+        width: 0;
+        height: 0;
+
+        margin: auto 0;
+
+        position: absolute;
+        top: 0;
+        bottom: -1.5rem;
+        right: -1rem;
+
+        border-bottom: 1.25rem solid var(--grey);
+        border-right: 1.25rem solid transparent;
+    }
+
+    &.chat-bubble--agent {
+        align-self: flex-start;
+
+        background: var(--blue);
+
+        p {
+            text-align: left;
+            color: var(--grey);
+        }
+
+        .name {
+            left: 0;
+            right: auto;
+        }
+
+        &:after {
+            left: -1rem;
+
+            border-bottom: 1.25rem solid var(--blue);
+            border-left: 1.25rem solid transparent;
+            border-right: 0;
+        }    
     }
 }
 </style>
