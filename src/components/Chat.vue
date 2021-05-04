@@ -1,7 +1,7 @@
 <template>
-    <div class="wrapper">
+    <div class="wrapper wrapper-chat">
         <div class="chat-bubbles">
-            <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="bubbleClass"><p>{{msg.message}}</p></div>
+            <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="msg.message.class"><p>{{msg.message}}</p></div>
         </div>
         <div class="form-wrapper">
             <div class="form-group">
@@ -32,12 +32,12 @@ export default {
     methods: {
         sendMessage(e) {
             e.preventDefault();
+            console.log('click')
 
             this.socket.emit('SEND_MESSAGE', {
                 user: this.type,
                 message: this.message,
-
-                
+                class: this.bubbleClass,
             });
             this.message = ''
             
@@ -46,17 +46,18 @@ export default {
     created(){
         this.username = this.$route.params.data.name;
         this.type = this.$route.params.data.type;
-
-        this.socket.on('MESSAGE', (data)=>{
-            if(this.type == "agent"){
-                console.log('agent');
+    if(this.type == "agent"){
+                this.bubbleClass = 'chatbubble--agent';
             }
             else {
-                console.log('nonagent')
+                this.bubbleClass='chatbubble--client';
             }
+        this.socket.on('MESSAGE', (data)=>{
+           
             this.messages.push({
                 message: data, 
                 user: this.type,
+                class: this.bubbleClass
             })
         });
     },
@@ -73,6 +74,39 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.wrapper-chat {
+    max-width: 95%;
+    height: 90%;
 
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr auto;
+
+    .form-wrapper {
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-end;
+
+        padding: 0;
+
+        .form-group {
+            margin: 0;
+
+            width: 100%;
+
+            input {
+                border: 1px solid var(--black);
+            }
+        }
+
+        .btn {
+            width: auto;
+            height: 2.75rem;
+            padding: 0.5rem;
+
+            border-radius: 0;
+        }
+    }
+}
 </style>
