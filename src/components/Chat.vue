@@ -33,16 +33,21 @@ export default {
     },
     methods: {
         sendMessage(e) {
+            const messageInput = document.getElementById('message').value;
             e.preventDefault();
-            console.log('click')
 
-            this.socket.emit('SEND_MESSAGE', {
+            if(messageInput){
+               this.socket.emit('SEND_MESSAGE', {
                 user: this.type,
                 message: this.message,
                 class: this.bubbleClass,
                 name: this.username
             });
+                this.message = '' 
             this.message = ''
+                this.message = '' 
+            }
+            
         }
     },
     created(){
