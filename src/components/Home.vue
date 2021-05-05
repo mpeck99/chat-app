@@ -157,7 +157,7 @@ export default {
         top: -2.25rem;
     }
 
-    input, select {
+    input, select, .form-control {
         height: 2.5rem;
 
         flex-grow: 1;
