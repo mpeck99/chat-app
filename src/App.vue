@@ -54,7 +54,7 @@ label, legend {
   font-size: 1.5rem;
 }
 
-p, ul, ol, a, input, select, .btn{
+p, ul, ol, a, input, select, .btn, .form-control {
   font-family: var(--body-font);
 }
 
