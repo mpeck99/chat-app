@@ -5,13 +5,13 @@
                 <span class="name">{{msg.message.name}}</span>
                 <p>{{msg.message.message}}</p></div>
         </div>
-        <div class="form-wrapper">
+        <form class="form-wrapper">
             <div class="form-group">
                 <label for="message">Message:</label>
-                <input type="text" v-model="message" class="form-control">
+                <textarea name="message" @keydown.enter.prevent="sendMessage" id="message" class="form-control" cols="30" rows="10" v-model="message" ></textarea>
             </div>
-            <input type="submit" class="btn" value="Send" @click="sendMessage"/> 
-        </div>
+            <button type="submit" class="btn" value="Send" @click="sendMessage">Send</button> 
+        </form>
     </div>
 
 </template>
