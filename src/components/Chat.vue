@@ -44,8 +44,6 @@ export default {
                 name: this.username
             });
                 this.message = '' 
-            this.message = ''
-                this.message = '' 
             }
             
         }
@@ -79,11 +77,13 @@ export default {
 <style lang="scss">
 .wrapper-chat {
     max-width: 95%;
-    height: 90%;
+    height: 90vh;
 
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 1fr 5rem;
+
+    position: relative;
 
     .form-wrapper {
         height: 100%;
@@ -91,6 +91,11 @@ export default {
         flex-direction: row;
         justify-content: center;
         align-items: flex-end;
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+
+        position: absolute;
+        bottom: 0.25rem;
 
         padding: 0;
 
@@ -99,14 +104,20 @@ export default {
 
             width: 100%;
 
-            input {
+            .form-control {
+                height: 4rem;
+                
+                padding: 0.75rem;
+                
                 border: 1px solid var(--black);
+
+                word-break: break-all;
             }
         }
 
         .btn {
             width: auto;
-            height: 2.75rem;
+            height: 5.6rem;
             padding: 0.5rem;
 
             border-radius: 0;
@@ -116,6 +127,7 @@ export default {
 
 .inner {
     height: 100%;
+    height: calc(100% - 5rem);
 
     display: flex;
     flex-direction: column;
@@ -126,6 +138,9 @@ export default {
 .chat-bubble {
     max-width: 45%;
     min-width: 4rem;
+
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
 
     padding: 0.5rem 1rem;
     margin: 2rem 0;
@@ -159,11 +174,9 @@ export default {
         width: 0;
         height: 0;
 
-        margin: auto 0;
 
         position: absolute;
-        top: 0;
-        bottom: -1.5rem;
+        bottom: 0;
         right: -1rem;
 
         border-bottom: 1.25rem solid var(--grey);
@@ -187,6 +200,7 @@ export default {
 
         &:after {
             left: -1rem;
+            bottom: 0;
 
             border-bottom: 1.25rem solid var(--blue);
             border-left: 1.25rem solid transparent;
