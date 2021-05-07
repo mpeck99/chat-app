@@ -1,12 +1,13 @@
 <template>
     <div class="wrapper wrapper-chat">
         <div class="inner">
-            <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="msg.message.class">
-                <span class="name">{{msg.message.name}}</span>
-                <p>{{msg.message.message}}</p>
+            <div class="chat-body">
+                <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="msg.message.class">
+                    <span class="name">{{msg.message.name}}</span>
+                    <p>{{msg.message.message}}</p>
+                </div>
             </div>
         </div>
-        
         <form class="form-wrapper">
             <div class="form-group">
                 <label for="message">Message:</label>
@@ -51,9 +52,13 @@ export default {
         }
     },
     created(){
+        // const chatDiv = document.querySelector('.inner');
         this.username = this.$route.params.data.name;
         this.type = this.$route.params.data.type;
         this.connectMessage = this.$route.params.data.name + ' has joined the chat.';
+
+       
+
     if(this.type == "agent"){
                 this.bubbleClass = 'chat-bubble--agent';
             }
@@ -69,7 +74,7 @@ export default {
             });
 
         });
-    }
+    }, 
     
 }
 </script>
@@ -124,22 +129,28 @@ export default {
     }
 }
 
-.inner {
-    width: 100%;
+.inner{
     height: 100%;
+    overflow: auto;
+}
+
+.chat-body {
+    width: 100%;
+    min-height: 100%;
 
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
 
-    overflow-y: scroll;
+     >:first-child {
+        margin-top: auto;
+    }
 }
 
 .chat-bubble {
     // max-width: 45%;
     // width: 100%;
     min-width: 4rem;
-
-    align-self: flex-end;
 
     padding: 0.5rem 1rem;
     margin: 2rem 1rem;
