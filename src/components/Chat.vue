@@ -81,9 +81,10 @@ export default {
 
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 1fr 5rem;
+    grid-template-rows: calc(100% - 8rem) 8rem;
 
     position: relative;
+    
 
     .form-wrapper {
         height: 100%;
@@ -93,9 +94,6 @@ export default {
         align-items: flex-end;
         grid-column: 1 / 2;
         grid-row: 2 / 3;
-
-        position: absolute;
-        bottom: 0.25rem;
 
         padding: 0;
 
@@ -112,6 +110,7 @@ export default {
                 border: 1px solid var(--black);
 
                 word-break: break-all;
+                resize: none;
             }
         }
 
@@ -126,24 +125,24 @@ export default {
 }
 
 .inner {
+    width: 100%;
     height: 100%;
-    height: calc(100% - 5rem);
 
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
+
+    overflow-y: scroll;
 }
 
 .chat-bubble {
-    max-width: 45%;
+    // max-width: 45%;
+    // width: 100%;
     min-width: 4rem;
 
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
+    align-self: flex-end;
 
     padding: 0.5rem 1rem;
-    margin: 2rem 0;
+    margin: 2rem 1rem;
 
     position: relative;
 
