@@ -148,8 +148,8 @@ export default {
 }
 
 .chat-bubble {
-    // max-width: 45%;
-    // width: 100%;
+    max-width: 45%;
+    
     min-width: 4rem;
 
     padding: 0.5rem 1rem;
