@@ -19,8 +19,16 @@ const io = require('socket.io')(server, {
 
 io.on('connection', function(socket) {
     console.log(socket.id)
-    socket.on('SEND_MESSAGE', function(data) {
-        io.emit('MESSAGE', data)
+    socket.join('chat');
+    
+    console.log(socket.rooms)
+    socket.on('send', function(data) {
+        io.to('chat').emit('message', data);
+        // io.to('chat').emit('user joined', socket.id);
     });
+    socket.on('connected', function(msg){
+        io.emit('connected', msg);
+    })
 });
+
 
