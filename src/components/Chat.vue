@@ -86,7 +86,7 @@ export default {
             let timer;
             this.typing = data.typing;
             clearTimeout(timer);
-            timer=setTimeout(this.notTyping, 1000)
+            timer=setTimeout(this.notTyping, 1000);
         })
 
     },
