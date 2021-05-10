@@ -138,6 +138,8 @@ export default {
     display: flex;
     flex-direction: column;
 
+    position: relative;
+
     padding: 1.5rem;
 }
 
