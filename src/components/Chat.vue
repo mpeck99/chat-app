@@ -2,16 +2,17 @@
     <div class="wrapper wrapper-chat">
         <div class="inner">
             <div class="chat-body">
-                <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="msg.message.class">
+                <div class="chat-bubble"  v-for="(msg, index) in messages" :key="index" :class="msg.message.class">
                     <span class="name">{{msg.message.name}}</span>
                     <p>{{msg.message.message}}</p>
                 </div>
             </div>
         </div>
+        <span :class="typing ? 'active' : ''" id="typing" ><span>.</span><span>.</span><span>.</span></span>
         <form class="form-wrapper">
             <div class="form-group">
                 <label for="message">Message:</label>
-                <textarea name="message" @keydown.enter.prevent="sendMessage" id="message" class="form-control" cols="30" rows="10" v-model="message" ></textarea>
+                <textarea name="message" @keyup="isTyping" @keydown.enter.prevent="sendMessage"  id="message" class="form-control" cols="30" rows="10" v-model="message" ></textarea>
             </div>
             <button type="submit" class="btn" value="Send" @click="sendMessage">Send</button> 
         </form>
@@ -32,7 +33,8 @@ export default {
             messages: [],
             bubbleClass:"",
             socket : io('localhost:3000'), 
-            connectMessage: ''
+            typing: false,
+            typingContent: '',
         }
     },
     methods: {
@@ -49,15 +51,21 @@ export default {
                 this.message = '' 
             }
             
-        }
+        },
+        notTyping(){
+            this.typing = false;
+        },
+        isTyping(e){
+            e.preventDefault();
+              this.socket.emit('typing',{
+                    typing: true
+                });
+        },
+        
     },
-    created(){
-        // const chatDiv = document.querySelector('.inner');
+    mounted(){
         this.username = this.$route.params.data.name;
         this.type = this.$route.params.data.type;
-        this.connectMessage = this.$route.params.data.name + ' has joined the chat.';
-
-       
 
     if(this.type == "agent"){
                 this.bubbleClass = 'chat-bubble--agent';
@@ -70,11 +78,20 @@ export default {
                 message: data, 
                 user: this.type,
                 class: this.bubbleClass,
-                connectMsg : this.connectMessage
             });
 
         });
-    }, 
+
+        this.socket.on('typing', (data)=>{
+            let timer;
+            this.typing = data.typing;
+            clearTimeout(timer);
+            timer=setTimeout(this.notTyping, 1000)
+        })
+
+    },
+
+ 
     
 }
 </script>
@@ -129,6 +146,14 @@ export default {
     }
 }
 
+#typing {
+    display: none;
+
+    &.active {
+        display: block;
+    }
+}
+
 .inner{
     height: 100%;
     overflow: auto;
@@ -149,7 +174,7 @@ export default {
 
 .chat-bubble {
     max-width: 45%;
-    
+
     min-width: 4rem;
 
     padding: 0.5rem 1rem;
