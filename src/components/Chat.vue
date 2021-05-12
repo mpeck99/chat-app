@@ -7,8 +7,17 @@
                     <p>{{msg.message.message}}</p>
                 </div>
             </div>
+            <ul class="users" v-if="connectedUsers">
+                <li v-for="(user, index) in connectedUsers" :key="index">
+                    {{user}}
+                </li>
+            </ul>
+            <div :class="typing ? 'active' : ''" class="typing" >
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-        <span :class="typing ? 'active' : ''" id="typing" ><span>.</span><span>.</span><span>.</span></span>
         <form class="form-wrapper">
             <div class="form-group">
                 <label for="message">Message:</label>
@@ -35,6 +44,7 @@ export default {
             socket : io('localhost:3000'), 
             typing: false,
             typingContent: '',
+            connectedUsers: []
         }
     },
     methods: {
@@ -61,9 +71,19 @@ export default {
                     typing: true
                 });
         },
+        userJoined(){
+            // this.connectedUsers=[];
+            this.socket.emit('joined',{
+                name: this.username,
+                msg: ' has joined the chat.'
+            })
+
+            // console.log('here');
+        }
         
     },
-    mounted(){
+
+    created(){
         this.username = this.$route.params.data.name;
         this.type = this.$route.params.data.type;
 
@@ -79,20 +99,35 @@ export default {
                 user: this.type,
                 class: this.bubbleClass,
             });
-
         });
 
         this.socket.on('typing', (data)=>{
             let timer;
             this.typing = data.typing;
             clearTimeout(timer);
-            timer=setTimeout(this.notTyping, 1000);
-        })
+            timer=setTimeout(this.notTyping, 2000);
+        });
 
+        this.socket.on('connect', ()=>{
+            // this.userJoined();
+            // this.connectedUsers = [];
+            // this.connectedUsers.push({
+            //     msg: data
+            // })
+            // // this.socket.on('joined', (data)=>{
+            // //     this.connectedUsers.push({
+            // //     name: data.name,
+            // //     msg: data.msg
+            // // });
+            // // })
+            this.socket.on('joined', (data)=>{
+                this.connectedUsers.push(data);
+                console.log(data);
+            });
+
+            this.socket.emit('joined', this.username+ ' has joined the chat');
+        });
     },
-
- 
-    
 }
 </script>
 
@@ -146,17 +181,11 @@ export default {
     }
 }
 
-#typing {
-    display: none;
-
-    &.active {
-        display: block;
-    }
-}
-
 .inner{
     height: 100%;
     overflow: auto;
+
+    position: relative;
 }
 
 .chat-body {
@@ -241,6 +270,31 @@ export default {
             border-left: 1.25rem solid transparent;
             border-right: 0;
         }    
+    }
+}
+
+.typing {
+    height: 1rem;
+    width: 4rem;
+  
+    display: none;
+
+    position: absolute;
+    bottom: 1rem;
+
+    &.active {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    span {
+        width: 1rem;
+        height: 1rem;
+
+        display: block;
+
+        border-radius: 50%;
+        background: var(--grey);
     }
 }
 </style>
