@@ -80,14 +80,13 @@ export default {
 
             // console.log('here');
         }
-        
     },
 
     created(){
         this.username = this.$route.params.data.name;
         this.type = this.$route.params.data.type;
 
-    if(this.type == "agent"){
+    if(this.type == "Agent"){
                 this.bubbleClass = 'chat-bubble--agent';
             }
             else {
@@ -109,17 +108,7 @@ export default {
         });
 
         this.socket.on('connect', ()=>{
-            // this.userJoined();
-            // this.connectedUsers = [];
-            // this.connectedUsers.push({
-            //     msg: data
-            // })
-            // // this.socket.on('joined', (data)=>{
-            // //     this.connectedUsers.push({
-            // //     name: data.name,
-            // //     msg: data.msg
-            // // });
-            // // })
+
             this.socket.on('joined', (data)=>{
                 this.connectedUsers.push(data);
                 console.log(data);
