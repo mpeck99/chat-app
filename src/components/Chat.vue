@@ -72,13 +72,10 @@ export default {
                 });
         },
         userJoined(){
-            // this.connectedUsers=[];
             this.socket.emit('joined',{
                 name: this.username,
                 msg: ' has joined the chat.'
             })
-
-            // console.log('here');
         }
     },
 

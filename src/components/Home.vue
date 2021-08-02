@@ -131,8 +131,8 @@ export default {
 }
 
 .error-wrapper {
-  width: calc(100% - 3.100%);
-  height: 4.100%;
+  width: calc(100% - 3rem);
+  min-height: 4rem;
 
   display: flex;
   align-items: center;
