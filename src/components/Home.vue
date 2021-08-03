@@ -1,8 +1,5 @@
 <template>
   <div class="wrapper">
-    <span class="icn-circle">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icn-chat" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-    </span>
     <h1>Chat</h1>
     <p>
       Welcome to my chat app. Please enter your name and select which user type
@@ -110,25 +107,6 @@ export default {
 </script>
 
 <style lang="scss">
-.icn-circle {
-    width: 9rem;
-    height: 9rem;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin-bottom: 1rem;
-
-    background: var(--blue);
-    border-radius: 50%;
-}
-.icn-chat {
-    width: 6em;
-    height: 6rem;
-
-    stroke: #fff;
-}
 
 .error-wrapper {
   width: calc(100% - 3rem);
@@ -229,6 +207,8 @@ export default {
   display: flex;
   flex-direction: column;
 
+  max-height: 2.75rem;
+
   position: relative;
 
   cursor: pointer;
@@ -273,6 +253,12 @@ export default {
         border-top: 0;
         border-bottom: 0.75rem solid var(--blue);
       }
+    }
+
+    &:hover, &:focus {
+      cursor: pointer;
+
+      border-color: var(--blue);
     }
   }
 
