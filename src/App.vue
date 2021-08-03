@@ -62,7 +62,7 @@ p, ul, ol, a, input, select, .btn, .form-control {
   max-width: 500px;
   width: 100%;
 
-  min-height: 75%;
+  max-height: 95%;
 
   display: flex;
   flex-direction: column;
