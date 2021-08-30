@@ -12,13 +12,13 @@
                     {{user}}
                 </li>
             </ul>
+        </div>
+        <form class="form-wrapper">
             <div :class="typing ? 'active' : ''" class="typing" >
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-        </div>
-        <form class="form-wrapper">
             <div class="form-group">
                 <label for="message">Message:</label>
                 <textarea name="message" @keyup="isTyping" @keydown.enter.prevent="sendMessage"  id="message" class="form-control" cols="30" rows="10" v-model="message" ></textarea>
@@ -60,7 +60,9 @@ export default {
             });
                 this.message = '' 
             }
-            
+            const inner = document.querySelector('.inner');
+            inner.lastChild.scrollIntoView();
+           window.scrollTo(0, document.querySelector('.chat-body').scrollHeight);
         },
         notTyping(){
             this.typing = false;
@@ -72,11 +74,11 @@ export default {
                 });
         },
         userJoined(){
-            this.socket.emit('joined',{
+            this.socket.emit('join',{
                 name: this.username,
                 msg: ' has joined the chat.'
             })
-        }
+        }, 
     },
 
     created(){
@@ -105,13 +107,16 @@ export default {
         });
 
         this.socket.on('connect', ()=>{
-
-            this.socket.on('joined', (data)=>{
+            this.socket.on('join', (data)=>{
                 this.connectedUsers.push(data);
                 console.log(data);
             });
+            this.socket.on('queue', (data)=>{
+                console.log('You had to join queue '+data);
+                this.socket.emit('queue', 'You have been put into the queue');
+            });
 
-            this.socket.emit('joined', this.username+ ' has joined the chat');
+            this.socket.emit('join', this.username+ ' has joined the chat');
         });
     },
 }
@@ -137,6 +142,8 @@ export default {
         align-items: flex-end;
         grid-column: 1 / 2;
         grid-row: 2 / 3;
+
+        position: relative;
 
         padding: 0;
 
@@ -168,6 +175,7 @@ export default {
 }
 
 .inner{
+    min-height: calc(100% - 4rem);
     height: 100%;
     overflow: auto;
 
@@ -176,11 +184,12 @@ export default {
 
 .chat-body {
     width: 100%;
-    min-height: 100%;
+    min-height: calc(100% - 4rem);
 
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+
 
      >:first-child {
         margin-top: auto;
@@ -266,7 +275,7 @@ export default {
     display: none;
 
     position: absolute;
-    bottom: 1rem;
+    top: -0.5rem;
 
     &.active {
         display: flex;
@@ -282,5 +291,16 @@ export default {
         border-radius: 50%;
         background: var(--grey);
     }
+}
+
+.users {
+    padding: 0;
+    margin-bottom: 0;
+
+    list-style-type: none;
+
+    color: darken(#EBEBEB, 50%);
+    font-style: italic;
+    font-size: 0.9rem;
 }
 </style>

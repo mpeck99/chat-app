@@ -2,8 +2,7 @@
   <div class="wrapper">
     <h1>Chat</h1>
     <p>
-      Welcome to my chat app. Please enter your name and select which user type
-      you are and hit connect to enter a chat.
+      Welcome to my chat app. Please enter your name and select a user type and click chat to continue. 
     </p>
     <div class="form-wrapper">
       <div class="form-group">
@@ -59,7 +58,6 @@ export default {
       }
 
       if (this.errorMsgs.length == 0) {
- 
         this.$router.push({
           name: "Chat",
           params: {
@@ -173,10 +171,12 @@ export default {
         border-radius: 0;
         border: 2px solid var(--black);
 
-    }
+        box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
 
-    select {
-        height: 3rem;
+        &:hover, &:focus {
+          border-color: var(--blue);
+          border-radius: 0;
+        }
     }
 }
 
@@ -192,6 +192,7 @@ export default {
 
     border: none;
     background-color: var(--blue);
+    box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
 
     color: var(--grey);
     font-weight: 700;
@@ -212,6 +213,8 @@ export default {
   position: relative;
 
   cursor: pointer;
+
+  box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
 
   *:before, &:after {
     box-sizing: border-box;
@@ -263,7 +266,6 @@ export default {
   }
 
   .select {
-  
     padding: 0;
     margin:0;
 
@@ -277,6 +279,9 @@ export default {
     z-index: 10;
 
     visibility: hidden;
+    opacity: 0;
+
+    transition: visibility 0.3s linear, opacity 0.3s linear;
 
     li {
       display: flex;
@@ -298,44 +303,7 @@ export default {
 
   .select[aria-expanded="true"] {
     visibility: visible;
+    opacity: 1;
   }
 }
-
-// .custom-select{
-//   display: flex;
-
-//   position: relative;
-
-//   &:after {
-//     content: '';
-
-//     height: 0;
-//     width: 0;
-
-//     position: absolute;
-//     right: 1rem;
-//     top: 40%;
-//     bottom: 0;
-
-
-//     border-left: 0.45rem solid transparent;
-//     border-right: 0.45rem solid transparent;
-//     border-top: 0.90rem solid var(--blue);
-
-//     pointer-events: none;
-//   }
-
-//   select {
-//     padding: 0.55rem;
-
-//     appearance: none;  
-//     ::-ms-expand {
-//       display: none;
-//     }
-
-//     option {
-//       background-color: red;
-//     }
-//   } 
-// }
 </style>

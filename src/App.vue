@@ -56,6 +56,11 @@ label, legend {
 
 p, ul, ol, a, input, select, .btn, .form-control {
   font-family: var(--body-font);
+  font-size: 1rem;
+}
+
+input {
+  padding-left: 0.5rem;
 }
 
 .wrapper {
