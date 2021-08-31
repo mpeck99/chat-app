@@ -1,15 +1,20 @@
+
+
 const express = require('express');
-const app = express();
-const port = process.env.PORT || 5000;
-const server = app.listen(port, function() {
-    console.log('server running on port 3000');
-});
-const io = require('socket.io')(server, {
-    cors: {
+const socketIO = require('socket.io');
+
+const PORT = process.env.PORT || 3000;
+const INDEX = '/index.html';
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+const io = socketIO(server, {
+    cors :  {
         origin: '*',
-        methods: ["GET", "POST"],
-        allowedHeaders: ["content-type"]
-      }
+        methods: ["GET", "POST"]
+    }
 });
 
 io.on('connection', function(socket) {
@@ -29,5 +34,8 @@ io.on('connection', function(socket) {
     })
     // io.emit('joined', 'user joined');
 });
+
+
+
 
 
