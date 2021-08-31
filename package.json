@@ -42,9 +42,6 @@
     },
     "rules": {}
   },
-  "engines" : {
-    "node": "12.x"
-  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
