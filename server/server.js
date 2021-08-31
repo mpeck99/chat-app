@@ -29,10 +29,10 @@ io.on('connection', function(socket) {
        io.to('chat').emit("typing", data);
     });
 
-    socket.on('joined', function(data){
-        io.to('chat').emit('joined', data);
+    socket.on('join', function(data){
+        socket.join('chat');
+        io.to('chat').emit('join', data);
     })
-    // io.emit('joined', 'user joined');
 });
 
 
