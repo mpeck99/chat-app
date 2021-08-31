@@ -121,11 +121,11 @@ export default {
         this.connectedUsers.push(data);
         console.log(data);
       });
-      this.socket.on("queue", (data) => {
-        console.log("You had to join queue " + data);
-        this.socket.emit("queue", "You have been put into the queue");
-      });
 
+      this.socket.on("queue", (data) => {
+        console.log("Placed in queue"); 
+      });
+      this.socket.emit("queue", "You have been put into the queue");
       this.socket.emit("join", this.username + " has joined the chat");
     });
   },

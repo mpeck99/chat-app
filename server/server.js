@@ -30,8 +30,22 @@ io.on('connection', function(socket) {
     });
 
     socket.on('join', function(data){
-        socket.join('chat');
-        io.to('chat').emit('join', data);
+        var users = io.sockets.adapter.rooms.get('chat').size;
+        
+        if(users <= 2 ) {
+            socket.join('chat');
+            io.to('chat').emit('join', data);  
+        }
+        else {
+           socket.join('queue');
+           io.to('queue').emit('queue', data);
+        }
+
+        
+
+       
+
+        
     })
 });
 
