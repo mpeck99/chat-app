@@ -2,7 +2,8 @@
   <div class="wrapper">
     <h1>Chat</h1>
     <p>
-      Welcome to my chat app. Please enter your name and select a user type and click chat to continue. 
+      Welcome to my chat app. Please enter your name and select a user type and
+      click chat to continue.
     </p>
     <div class="form-wrapper">
       <div class="form-group">
@@ -11,19 +12,22 @@
       </div>
       <div class="form-group custom-select">
         <label for="user" id="user">User type</label>
-        <button class="select-toggle" type="button" aria-haspopup="true" @click='customSelect' id="type">Select user type</button>
-        <ul class="select" role="listbox" aria-expanded="false"  aria-labelledby="user">
+        <button class="select-toggle" type="button" aria-haspopup="true" @click="customSelect" id="type"
+        >Select user type</button>
+        <ul class="select" role="listbox" aria-expanded="false" aria-labelledby="user">
           <li role="option" value="agent" tabindex="0" aria-selected="false">Agent</li>
           <li role="option" value="client" tabindex="0" aria-selected="false">Client</li>
         </ul>
       </div>
-      <div class="error-wrapper" v-if="errorMsgs[0]" >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <div class="error-wrapper" v-if="errorMsgs[0]">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        ><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
         <ul class="errors">
           <li v-for="(error, index) in errorMsgs" :key="index">{{ error }}</li>
         </ul>
       </div>
-    </div> 
+    </div>
     <input type="submit" value="Chat" @click="storeData" class="btn" />
   </div>
 </template>
@@ -58,54 +62,55 @@ export default {
       }
 
       if (this.errorMsgs.length == 0) {
-        this.$router.push({
-          name: "Chat",
-          params: {
-            data: {
-              name: this.name,
-              type: this.userType,
-            },
-          },
+        localStorage["data"] = JSON.stringify({
+          name: this.name,
+          type: this.userType,
+        });
+        this.windowRef = window.open(
+          "/chat",
+          "",
+          "width=400,height=600,left=200,top=200"
+        );
+        this.$router.resolve({
+          path: "/chat",
         });
       }
     },
-    customSelect(){
-      const toggler = document.querySelector('.select-toggle');
-      const select = document.querySelector('.select');
-  
-        const selectOptions = select.children;
+    customSelect() {
+      const toggler = document.querySelector(".select-toggle");
+      const select = document.querySelector(".select");
 
-        [...selectOptions].forEach(item => {
-          item.setAttribute('aria-selected', false);
-            
-            item.addEventListener ('click', function(){
-              const value = item.textContent;
-              toggler.textContent = value;
-              this.value = value;
-              if(item.getAttribute('aria-selected') !== 'true'){
-                item.setAttribute('aria-selected', true);
-              }
+      const selectOptions = select.children;
 
-              select.setAttribute('aria-expanded', false);
-              toggler.classList.remove('active');
-            });
+      [...selectOptions].forEach((item) => {
+        item.setAttribute("aria-selected", false);
+
+        item.addEventListener("click", function () {
+          const value = item.textContent;
+          toggler.textContent = value;
+          this.value = value;
+          if (item.getAttribute("aria-selected") !== "true") {
+            item.setAttribute("aria-selected", true);
+          }
+
+          select.setAttribute("aria-expanded", false);
+          toggler.classList.remove("active");
         });
-      
-       if(select.getAttribute('aria-expanded') !== 'true'){
-          select.setAttribute('aria-expanded', 'true'); 
-          toggler.classList.add('active');
-        }
-        else {
-          select.setAttribute('aria-expanded', false);
-          toggler.classList.remove('active');
-        }
-    }
+      });
+
+      if (select.getAttribute("aria-expanded") !== "true") {
+        select.setAttribute("aria-expanded", "true");
+        toggler.classList.add("active");
+      } else {
+        select.setAttribute("aria-expanded", false);
+        toggler.classList.remove("active");
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss">
-
 .error-wrapper {
   width: calc(100% - 3rem);
   min-height: 4rem;
@@ -139,69 +144,72 @@ export default {
 }
 
 .form-wrapper {
-    width: 100%;
+  width: 100%;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    position: relative;
+  position: relative;
 
-    padding: 1.5rem;
+  padding: 1.5rem;
 }
 
 .form-group {
-    width: 100%;
-    
-    display: flex;
-    
-    position: relative;
+  width: 100%;
 
-    margin: 1.75rem 0;
+  display: flex;
 
-    label {
-        position: absolute;
-        top: -2.25rem;
-    }
+  position: relative;
 
-    input, select, .form-control {
-        height: 2.5rem;
+  margin: 1.75rem 0;
 
-        flex-grow: 1;
+  label {
+    position: absolute;
+    top: -2.25rem;
+  }
 
-        border-radius: 0;
-        border: 2px solid var(--black);
+  input,
+  select,
+  .form-control {
+    height: 2.5rem;
 
-        box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
+    flex-grow: 1;
 
-        &:hover, &:focus {
-          border-color: var(--blue);
-          border-radius: 0;
-        }
-    }
-}
+    border-radius: 0;
+    border: 2px solid var(--black);
 
-.btn {
-    width: 100%;
-    min-height: 2.5rem;
-    
-    justify-self: flex-end;
-    align-self: flex-end;
-
-    padding: 1rem;
-    margin-top: 6rem;
-
-    border: none;
-    background-color: var(--blue);
     box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
-
-    color: var(--grey);
-    font-weight: 700;
-    font-size: 1.25rem;
 
     &:hover,
     &:focus {
-        background-color: var(--blued);
+      border-color: var(--blue);
+      border-radius: 0;
     }
+  }
+}
+
+.btn {
+  width: 100%;
+  min-height: 2.5rem;
+
+  justify-self: flex-end;
+  align-self: flex-end;
+
+  padding: 1rem;
+  margin-top: 6rem;
+
+  border: none;
+  background-color: var(--blue);
+  box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
+
+  color: var(--grey);
+  font-weight: 700;
+  font-size: 1.25rem;
+
+  &:hover,
+  &:focus {
+    background-color: var(--blued);
+  }
 }
 
 .custom-select {
@@ -216,7 +224,8 @@ export default {
 
   box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
 
-  *:before, &:after {
+  *:before,
+  &:after {
     box-sizing: border-box;
   }
 
@@ -224,7 +233,7 @@ export default {
     appearance: none;
 
     position: relative;
-    
+
     padding: 0.75rem 2rem 0.75rem 0.75rem;
 
     background: transparent;
@@ -236,8 +245,8 @@ export default {
     text-align: left;
 
     &:after {
-      content: '';
-      
+      content: "";
+
       height: 0;
       width: 0;
 
@@ -248,7 +257,6 @@ export default {
       border-left: 0.5rem solid transparent;
       border-right: 0.5rem solid transparent;
       border-top: 0.75rem solid var(--blue);
-
     }
 
     &.active {
@@ -258,7 +266,8 @@ export default {
       }
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       cursor: pointer;
 
       border-color: var(--blue);
@@ -267,7 +276,7 @@ export default {
 
   .select {
     padding: 0;
-    margin:0;
+    margin: 0;
 
     list-style-type: none;
 
@@ -295,10 +304,11 @@ export default {
         border-bottom: 0;
       }
 
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         background-color: lighten(#e3e3e2, 8%);
+      }
     }
-}
   }
 
   .select[aria-expanded="true"] {
