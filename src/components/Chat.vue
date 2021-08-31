@@ -122,7 +122,7 @@ export default {
         console.log(data);
       });
 
-      this.socket.on("queue", (data) => {
+      this.socket.on("queue", () => {
         console.log("Placed in queue"); 
       });
       this.socket.emit("queue", "You have been put into the queue");
