@@ -5,7 +5,7 @@ const server = app.listen(process.env.PORT || 3000, function() {
 });
 const io = require('socket.io')(server, {
     cors: {
-        origin: process.env.PORT || 3000,
+        origin: 'https://radiant-atoll-76864.herokuapp.com/',
         methods: ["GET", "POST"]
       }
 });
