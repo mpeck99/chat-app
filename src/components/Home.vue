@@ -206,6 +206,8 @@ export default {
   font-weight: 700;
   font-size: 1.25rem;
 
+  -webkit-appearance:none;
+
   &:hover,
   &:focus {
     background-color: var(--blued);
