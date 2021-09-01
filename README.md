@@ -1,7 +1,7 @@
 # Vue chat app
 This is a chat application that will allow two uses to chat in real-time via their browser.
 
-[Demo](chat.morganpeck.com) 
+[Demo](http://chat.morganpeck.com/) 
 
 ![Example](./src/assets/demo.png)
 ![Example](./src/assets/demo-chatbox.png)  ![Example](./src/assets/demo-chatbox-message.png)
