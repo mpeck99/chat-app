@@ -59,6 +59,10 @@ p, ul, ol, a, input, select, .btn, .form-control {
   font-size: 1rem;
 }
 
+p {
+  width: 100%;
+}
+
 input {
   padding-left: 0.5rem;
 }

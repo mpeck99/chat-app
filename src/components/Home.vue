@@ -188,7 +188,7 @@ export default {
   }
 }
 
-.btn {
+.btn, input[type="submit"] {
   width: 100%;
   min-height: 2.5rem;
 
