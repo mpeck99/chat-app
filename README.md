@@ -1,8 +1,10 @@
 # Vue chat app
-This is a chat application that will allow two uses to chat in real-time via their browser. View the demo by clicking the link below (hosted by Heroku) 
-[Demo](chat.morganpeck.com)
-![Example](https://github.com/mpeck99/chat-app/src/assets/demo.png)
-## Built with 
+This is a chat application that will allow two uses to chat in real-time via their browser.
+
+[Demo](chat.morganpeck.com) 
+ 
+![Example](./src/assets/demo.png)
+## Built with: 
 - [Vue](https://vuejs.org/)
 - [NPM](https://www.npmjs.com/)
 - [Express](https://expressjs.com/)
@@ -12,7 +14,7 @@ This is a chat application that will allow two uses to chat in real-time via the
 # Getting started
 ## Cloning repo
 `git clone https://github.com/mpeck99/chat-app.git`
-## Project set up
+## Installing node_modules and packages
 ```npm install```
 ## Running locally for development
 ```npm run start```
