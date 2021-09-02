@@ -4,13 +4,18 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const PORT = process.env.PORT || 3000;
-const INDEX = '/index.html';
+const INDEX = '../index.html';
 
-var app = express(),
-server = require('http').createServer(app),
-io = socketIO.listen(server);
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-server.listen(process.env.PORT || 3000);
+const io = socketIO(server, {
+    cors :  {
+        origin: '*',
+        methods: ["GET", "POST"]
+    }
+});
 
 
 
