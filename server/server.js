@@ -12,6 +12,7 @@ const server = express()
     cors: {
         origin: `*`, // I copied the origin in the error message and pasted here
         methods: ["GET", "POST"],
+        secure: false
       }
 });
 
