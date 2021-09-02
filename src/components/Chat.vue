@@ -43,7 +43,7 @@ export default {
       message: "",
       messages: [],
       bubbleClass: "",
-      socket: io('http://chat.morganpeck.com'),
+      socket: io("http://chat.morganpeck:"+process.env.PORT),
       typing: false,
       typingContent: "",
       connectedUsers: [],
