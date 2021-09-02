@@ -12,7 +12,7 @@ const server = express()
 
 const io = socketIO(server, {
     cors :  {
-        // origin: '*',
+        origin: '*',
         methods: ["GET", "POST"]
     }
 });
