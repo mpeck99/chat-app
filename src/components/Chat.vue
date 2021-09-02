@@ -33,8 +33,7 @@
 
 <script>
 import io from "socket.io-client";
-var server ='https://radiant-atoll-76864.herokuapp.com:'+process.env.PORT
-var socket = io.connect(server);
+var socket = io('http://chat.morganpeck.com');
 export default {
   props: ["name", "userType"],
   data() {
@@ -117,6 +116,7 @@ export default {
     });
 
     socket.on("connect", () => {
+      console.log('connected');
       socket.on("join", (data) => {
         this.connectedUsers.push(data);
         console.log(data);
