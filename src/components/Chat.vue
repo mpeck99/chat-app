@@ -33,7 +33,7 @@
 
 <script>
 import io from "socket.io-client";
-
+var socket = io('http://chat.morganpeck.com:3000');
 export default {
   props: ["name", "userType"],
   data() {
@@ -43,7 +43,6 @@ export default {
       message: "",
       messages: [],
       bubbleClass: "",
-      socket: io("https://radiant-atoll-76864.herokuapp.com:"+process.env.PORT),
       typing: false,
       typingContent: "",
       connectedUsers: [],
@@ -54,7 +53,7 @@ export default {
       const messageInput = document.getElementById("message").value;
       e.preventDefault();
       if (messageInput) {
-        this.socket.emit("send", {
+        socket.emit("send", {
           user: this.type,
           message: this.message,
           class: this.bubbleClass,
@@ -71,12 +70,12 @@ export default {
     },
     isTyping(e) {
       e.preventDefault();
-      this.socket.emit("typing", {
+      socket.emit("typing", {
         typing: true,
       });
     },
     userJoined() {
-      this.socket.emit("join", {
+      socket.emit("join", {
         name: this.username,
         msg: " has joined the chat.",
       });
@@ -101,7 +100,7 @@ export default {
     } else {
       this.bubbleClass = "chat-bubble--client";
     }
-    this.socket.on("message", (data) => {
+    socket.on("message", (data) => {
       this.messages.push({
         message: data,
         user: this.type,
@@ -109,24 +108,24 @@ export default {
       });
     });
 
-    this.socket.on("typing", (data) => {
+    socket.on("typing", (data) => {
       let timer;
       this.typing = data.typing;
       clearTimeout(timer);
       timer = setTimeout(this.notTyping, 2000);
     });
 
-    this.socket.on("connect", () => {
-      this.socket.on("join", (data) => {
+    socket.on("connect", () => {
+      socket.on("join", (data) => {
         this.connectedUsers.push(data);
         console.log(data);
       });
 
-      this.socket.on("queue", () => {
+      socket.on("queue", () => {
         console.log("Placed in queue"); 
       });
-      this.socket.emit("queue", "You have been put into the queue");
-      this.socket.emit("join", this.username + " has joined the chat");
+      socket.emit("queue", "You have been put into the queue");
+      socket.emit("join", this.username + " has joined the chat");
     });
   },
 };
