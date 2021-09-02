@@ -33,7 +33,8 @@
 
 <script>
 import io from "socket.io-client";
-var socket = io('http://chat.morganpeck.com');
+var socket = io('http://chat.morganpeck.com:80', {transports: ['websocket'], upgrade: false});
+
 export default {
   props: ["name", "userType"],
   data() {

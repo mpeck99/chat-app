@@ -10,16 +10,13 @@ const server = express()
   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-
+// io.set('transports', ['websocket']);
   const io = socketIO(server, {
-    pingTimeout: 60000,
     cors: {
         origin: `*`, // I copied the origin in the error message and pasted here
         methods: ["POST", "GET"]
       }
 });
-
-
 
 io.on('connection', function(socket) {
     socket.join('chat');
