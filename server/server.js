@@ -2,20 +2,16 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const PORT = process.env.PORT || 3000;
-const INDEX = '../dist/index.html';
+const INDEX = '/index.html';
 
 const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+//   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-  const io = socketio(server, {
+  const io = socketIO(server, {
     cors: {
-        origin: `*:*`, // I copied the origin in the error message and pasted here
+        origin: `*`, // I copied the origin in the error message and pasted here
         methods: ["GET", "POST"],
-        credentials: true,
-        allowedHeaders: ["content-type"],
-        pingTimeout: 7000,
-        pingInterval: 3000
       }
 });
 

@@ -33,7 +33,7 @@
 
 <script>
 import io from "socket.io-client";
-var socket = io.connect();
+var socket = io('https://chat.morganpeck.com');
 export default {
   props: ["name", "userType"],
   data() {
