@@ -1,13 +1,19 @@
-var express = require('express');
-var app = express();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
-var PORT = process.env.PORT || 3000;
+const express = require('express');
+const socketIO = require('socket.io');
 
+const PORT = process.env.PORT || 3000;
+const INDEX = '../dist/index.html';
 
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-http.listen(PORT,function(){
-    console.log("Listening to port " + PORT);
+  const io = socketio(server, {
+    cors: {
+        origin: `http://chat.morganpeck.com`, // I copied the origin in the error message and pasted here
+        methods: ["GET", "POST"],
+        credentials: true
+      }
 });
 
 
