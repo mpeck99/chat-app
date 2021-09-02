@@ -12,8 +12,9 @@ const server = express()
 
 const io = socketIO(server, {
     cors :  {
-        origin: '*',
-        methods: ["GET", "POST"]
+        origin: 'http://chat.morganpeck.com',
+        methods: ["GET", "POST"],
+        m
     }
 });
 
