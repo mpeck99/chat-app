@@ -12,7 +12,10 @@ const server = express()
     cors: {
         origin: `http://chat.morganpeck.com`, // I copied the origin in the error message and pasted here
         methods: ["GET", "POST"],
-        credentials: true
+        credentials: true,
+        allowedHeaders: ["content-type"],
+        pingTimeout: 7000,
+        pingInterval: 3000
       }
 });
 
