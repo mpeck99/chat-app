@@ -33,7 +33,7 @@
 
 <script>
 import io from "socket.io-client";
-var socket = io.connect('http://chat.morganpeck.com');
+var socket = io.connect('https://radiant-atoll-76864.herokuapp.com/');
 export default {
   props: ["name", "userType"],
   data() {
