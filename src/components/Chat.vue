@@ -43,7 +43,7 @@ export default {
       message: "",
       messages: [],
       bubbleClass: "",
-      socket: io('http://localhost:3000'||'https://radiant-atoll-76864.herokuapp.com:80'),
+      socket: io(''),
       typing: false,
       typingContent: "",
       connectedUsers: [],
