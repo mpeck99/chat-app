@@ -12,6 +12,7 @@ const server = express()
 
 
   const io = socketIO(server, {
+    pingTimeout: 60000,
     cors: {
         origin: `*`, // I copied the origin in the error message and pasted here
         methods: ["POST", "GET"]
