@@ -1,21 +1,14 @@
-const express = require('express');
-const socketIO = require('socket.io');
+var express = require('express');
+var app = express();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+var PORT = process.env.PORT || 3000;
 
-const PORT = process.env.PORT || 3000;
-const INDEX = '../dist/index.html';
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-const io = socketIO(server, {
-    cors :  {
-        origin: "*",
-        methods: ["GET", "POST"],
-        secure: false
-    }
+http.listen(PORT,function(){
+    console.log("Listening to port " + PORT);
 });
-
 
 
 io.on('connection', function(socket) {
