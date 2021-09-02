@@ -33,7 +33,8 @@
 
 <script>
 import io from "socket.io-client";
-var socket = io.connect('https://radiant-atoll-76864.herokuapp.com/');
+var server =' https://radiant-atoll-76864.herokuapp.com:'+process.env.PORT
+var socket = io.connect(server);
 export default {
   props: ["name", "userType"],
   data() {
