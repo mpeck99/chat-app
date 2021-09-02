@@ -17,8 +17,11 @@ const io = socketIO(server, {
     }
 });
 
+
+
 io.on('connection', function(socket) {
     socket.join('chat');
+    console.log('connected');console.log(PORT);
  
     // io.emit('connected');
     socket.on('send', function(data) {
