@@ -10,7 +10,7 @@ const server = express()
 
   const io = socketio(server, {
     cors: {
-        origin: `http://chat.morganpeck.com`, // I copied the origin in the error message and pasted here
+        origin: `*:*`, // I copied the origin in the error message and pasted here
         methods: ["GET", "POST"],
         credentials: true,
         allowedHeaders: ["content-type"],
