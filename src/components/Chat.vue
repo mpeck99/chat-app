@@ -43,7 +43,7 @@ export default {
       message: "",
       messages: [],
       bubbleClass: "",
-      socket: io("http://chat.morganpeck:"+process.env.PORT),
+      socket: io("https://radiant-atoll-76864.herokuapp.com/"),
       typing: false,
       typingContent: "",
       connectedUsers: [],
