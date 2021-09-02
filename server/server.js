@@ -10,7 +10,12 @@ const server = express()
   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-const io = socketIO(server);
+const io = socketIO(server, {
+    cors :  {
+        origin: '*',
+        methods: ["GET", "POST"]
+    }
+});
 
 io.on('connection', function(socket) {
     socket.join('chat');
