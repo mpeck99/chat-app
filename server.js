@@ -13,11 +13,9 @@ const server = express()
 const io = socketIO(server, {
     cors :  {
         origin: '*',
-        methods: ["GET", "POST"],
+        methods: ["GET", "POST"]
     }
 });
-
-io.set('transports', ['websocket']);
 
 io.on('connection', function(socket) {
     socket.join('chat');

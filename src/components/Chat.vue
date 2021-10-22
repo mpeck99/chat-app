@@ -34,7 +34,9 @@
 <script>
 import io from "socket.io-client";
 
-var socket = io.connect('https://radiant-atoll-76864.herokuapp.com', {transports: ['websocket'], upgrade: false});
+// var socket = io(':5000', {transports: ['websocket'], upgrade: false});
+var socket = io.connect('https://radiant-atoll-76864.herokuapp.com/',
+    {reconnect: true, transports : ['websocket'], path: '/socket.io'});
 
 export default {
   props: ["name", "userType"],
