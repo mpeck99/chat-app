@@ -1,26 +1,24 @@
-'use strict';
+
 
 const express = require('express');
 const socketIO = require('socket.io');
 
-const PORT = process.env.PORT || 3000;
-const INDEX = '/index.html';
+const PORT = process.env.PORT || 5001;
+const INDEX = 'dist/index.html';
 
 const server = express()
   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-// io.set('transports', ['websocket']);
-  const io = socketIO(server, {
-    cors: {
-        origin: `*`, // I copied the origin in the error message and pasted here
-        methods: ["POST", "GET"]
-      }
+const io = socketIO(server, {
+    cors :  {
+        origin: '*',
+        methods: ["GET", "POST"]
+    }
 });
 
 io.on('connection', function(socket) {
     socket.join('chat');
-    console.log('connected');console.log(PORT);
  
     // io.emit('connected');
     socket.on('send', function(data) {
@@ -42,6 +40,12 @@ io.on('connection', function(socket) {
            socket.join('queue');
            io.to('queue').emit('queue', data);
         }
+
+        
+
+       
+
+        
     })
 });
 

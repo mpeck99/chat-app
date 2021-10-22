@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "node server/server.js"
+    "start": "node server.js & vue-cli-service serve", 
+    "heroku-postbuild": "vue-cli-service serve"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -16,7 +17,7 @@
     "vue": "^2.6.11"
   },
   "engines": {
-    "node": "12.x"
+    "node": "10.10.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
