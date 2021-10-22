@@ -14,9 +14,7 @@ const io = socketIO(server, {
     cors :  {
         origin: '*',
         methods: ["GET", "POST"],
-        allowedHeaders: ["content-type"],
-        pingTimeout: 7000,
-        pingInterval: 3000
+        
     }
 });
 
