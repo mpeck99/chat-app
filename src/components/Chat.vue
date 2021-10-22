@@ -33,8 +33,8 @@
 
 <script>
 import io from "socket.io-client";
-const url = process.env.NODE_ENV === 'production' ? window.location.hostname : ':5000'
-var socket = io(url);
+
+var socket = io('https://radiant-atoll-76864.herokuapp.com', {transports: ['websocket'], upgrade: false});
 
 export default {
   props: ["name", "userType"],
