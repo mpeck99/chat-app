@@ -12,7 +12,7 @@ const server = express()
 
 const io = socketIO(server, {
     cors :  {
-        origin: '*',
+        origin: 'https://radiant-atoll-76864.herokuapp.com/',
         methods: ["GET", "POST"]
     }
 });
