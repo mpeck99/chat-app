@@ -16,9 +16,6 @@
     "socket.io-client": "^4.0.1",
     "vue": "^2.6.11"
   },
-  "engines": {
-    "node": "10.10.0"
-  },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
