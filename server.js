@@ -3,7 +3,7 @@
 const express = require('express');
 const socketIO = require('socket.io');
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 const INDEX = 'dist/index.html';
 
 const server = express()
@@ -12,7 +12,7 @@ const server = express()
 
 const io = socketIO(server, {
     cors :  {
-        origin: 'https://radiant-atoll-76864.herokuapp.com/',
+        origin: '*',
         methods: ["GET", "POST"]
     }
 });
