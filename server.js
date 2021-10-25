@@ -1,24 +1,43 @@
 
 
-const express = require('express');
-const socketIO = require('socket.io');
+// const express = require('express');
+// const socketIO = require('socket.io');
 
-const PORT = process.env.PORT || 5000;
-const INDEX = 'dist/index.html';
+// const PORT = process.env.PORT || 5000;
+// const INDEX = 'dist/index.html';
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+// const server = express()
+//   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+//   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-const io = socketIO(server, {
-    cors :  {
-        origin: '*',
-        methods: ["GET", "POST"]
-    }
-});
+// const io = socketIO(server, {
+//     cors :  {
+//         origin: '*',
+//         methods: ["GET", "POST"]
+//     }
+// });
 
+
+const express = require('express')
+const port = process.env.PORT || 5000
+var app = require('express')()
+var http = require('http').Server(app)
+var io = require('socket.io')(http)
+
+/*
+ *  Serve /dist/ folder
+ */
+app.use(express.static(__dirname + '/dist'))
+app.get(/.*/, (req, res) => {
+	res.sendFile(__dirname + '/dist/index.html')
+})
+
+http.listen(port, () => {
+	console.log(`Listening on port ${port}`)
+})
 
 io.on('connection', function(socket) {
+    console.log('joined');
     socket.join('chat');
  
     // io.emit('connected');
