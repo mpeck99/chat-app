@@ -34,7 +34,7 @@
 <script>
 import io from "socket.io-client";
 
-var socket = io(':80', {transports: ['websocket'], upgrade: false});
+var socket = io(':443', {transports: ['websocket'], upgrade: false});
 
 // let socket = io();
 
