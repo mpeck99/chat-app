@@ -33,8 +33,9 @@
 
 <script>
 import io from "socket.io-client";
-
-var socket = io('https://radiant-atoll-76864.herokuapp.com/:443', {transports: ['websocket'], upgrade: false});
+var PORT = process.env.VUE_APP_ENV_PORT;
+console.log(PORT);
+var socket = io(`:`+PORT, {transports: ['websocket'], upgrade: false});
 
 // let socket = io();
 
