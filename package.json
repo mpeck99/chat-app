@@ -13,7 +13,8 @@
     "express": "^4.17.1",
     "socket.io": "^4.0.1",
     "socket.io-client": "^4.0.1",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-socket.io": "^3.0.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

@@ -35,8 +35,17 @@
 import io from "socket.io-client";
 
 // var socket = io(':5000', {transports: ['websocket'], upgrade: false});
-var socket = io.connect('https://radiant-atoll-76864.herokuapp.com/',
-    {reconnect: true, transports : ['websocket'], path: '/socket.io'});
+// var socket = io();
+
+const socket = io('https://radiant-atoll-76864.herokuapp.com', {
+    reconnectionDelay: 1000,
+    reconnection: true,
+    reconnectionAttemps: 10,
+    transports: ['websocket'],
+    agent: false,
+    upgrade: false,
+    rejectUnauthorized: false
+});
 
 export default {
   props: ["name", "userType"],
