@@ -35,7 +35,7 @@
 import io from "socket.io-client";
 var PORT = process.env.VUE_APP_ENV_PORT;
 console.log(PORT);
-var socket = io({transports: ['websocket'], upgrade: false});
+var socket = io(':80',{transports: ['websocket'], upgrade: false});
 
 // let socket = io();
 
