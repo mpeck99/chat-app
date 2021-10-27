@@ -1,1 +1,1 @@
-web: node server.js & çvue-cli-service serve
+web: node server.js
