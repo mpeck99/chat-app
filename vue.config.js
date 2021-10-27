@@ -1,4 +1,6 @@
 module.exports = {
+  publicPath: '/',
+  outputDir: './dist/',
   chainWebpack: config => {
     config
     .plugin('html')
@@ -6,5 +8,6 @@ module.exports = {
       args[0].title = 'Vue Chat App'
       return args
     })
-  }
+  },
+  
 }
