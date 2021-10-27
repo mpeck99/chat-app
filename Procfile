@@ -1,1 +1,1 @@
-web: node server.js & vue-cli-service serve
+web: node server.js
