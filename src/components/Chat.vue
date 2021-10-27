@@ -35,7 +35,8 @@
 import io from "socket.io-client";
 var PORT = process.env.VUE_APP_ENV_PORT;
 console.log(PORT);
-var socket = io('https://radiant-atoll-76864.herokuapp.com:80',{transports: ['websocket'], upgrade: false});
+var socket = io(':5000',{transports: ['websocket'], reconnect: true,
+    'reconnection delay': 500});
 
 
 

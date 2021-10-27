@@ -3,9 +3,10 @@
 const express = require('express');
 const socketIO = require('socket.io');
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 const INDEX = '/index.html';
 
+console.log(PORT);
 const server = express();
   server.use((req, res) => res.sendFile(INDEX, { root: __dirname }));
   server.listen(PORT, () => console.log(`Listening on ${PORT}`));
