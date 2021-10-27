@@ -33,14 +33,8 @@
 
 <script>
 import io from "socket.io-client";
-// var PORT = process.env.VUE_APP_ENV_PORT;
 
 var socket = io();
-
-
-
-// let socket = io();
-
 
 export default {
   props: ["name", "userType"],
