@@ -2,7 +2,12 @@
   <div class="wrapper wrapper-chat">
     <div class="inner">
       <div class="chat-body">
-        <div class="chat-bubble" v-for="(msg, index) in messages" :key="index" :class="msg.message.class">
+        <div
+          class="chat-bubble"
+          v-for="(msg, index) in messages"
+          :key="index"
+          :class="msg.message.class"
+        >
           <span class="name">{{ msg.message.name }}</span>
           <p>{{ msg.message.message }}</p>
         </div>
@@ -21,7 +26,15 @@
       </div>
       <div class="form-group">
         <label for="message">Message:</label>
-        <textarea name="message" @keyup="isTyping" @keydown.enter.prevent="sendMessage" id="message" class="form-control" cols="30" rows="10" v-model="message"
+        <textarea
+          name="message"
+          @keyup="isTyping"
+          @keydown.enter.prevent="sendMessage"
+          id="message"
+          class="form-control"
+          cols="30"
+          rows="10"
+          v-model="message"
         ></textarea>
       </div>
       <button type="submit" class="btn" value="Send" @click="sendMessage">
@@ -37,7 +50,7 @@ import io from "socket.io-client";
 var socket = io();
 
 export default {
-  props: ["name", "userType"],
+  props: ["name", "userType", "id"],
   data() {
     return {
       username: "",
@@ -88,47 +101,53 @@ export default {
     let data = {};
     try {
       data = JSON.parse(localStorage["data"]);
-         this.username = data.name;
-    this.type = data.type;
+      this.username = data.name;
+      this.type = data.type;
     } catch (error) {
       // ignore
     }
- 
 
-   
-
-    if (this.type == 'Agent') {
+    if (this.type == "Agent") {
       this.bubbleClass = "chat-bubble--agent";
     } else {
       this.bubbleClass = "chat-bubble--client";
     }
-    socket.on("message", (data) => {
-      this.messages.push({
-        message: data,
-        user: this.type,
-        class: this.bubbleClass,
-      });
+    // socket.on("message", (data) => {
+    //   this.messages.push({
+    //     message: data,
+    //     user: this.type,
+    //     class: this.bubbleClass,
+    //   });
+    // });
+
+    // socket.on("typing", (data) => {
+    //   let timer;
+    //   this.typing = data.typing;
+    //   clearTimeout(timer);
+    //   timer = setTimeout(this.notTyping, 2000);
+    // });
+
+    // socket.on("connect", (data) => {
+    //   this.connectedUsers.push(data);
+    //   socket.on("join", (data) => {
+    //     this.connectedUsers.push(data);
+    //   });
+
+    //   socket.emit("join", this.username + " has joined the chat");
+    // });
+
+    //  socket.on("queue", (data) => {
+    //     console.log(data);
+    //   });
+    //   socket.emit("queue", "You have been put into the queue");
+    socket.emit("connected", {
+      name: this.username,
+      type: this.type,
     });
-
-    socket.on("typing", (data) => {
-      let timer;
-      this.typing = data.typing;
-      clearTimeout(timer);
-      timer = setTimeout(this.notTyping, 2000);
-    });
-
-    socket.on("connect", () => {
-      console.log('connected');
-      socket.on("join", (data) => {
-        this.connectedUsers.push(data);
-        console.log(data);
-      });
-
-      socket.on("queue", () => {
-        console.log("Placed in queue"); 
-      });
-      socket.emit("queue", "You have been put into the queue");
-      socket.emit("join", this.username + " has joined the chat");
+  
+    socket.emit("waiting", {
+      name: this.username,
+      msg: "You have been placed in the queue."
     });
   },
 };

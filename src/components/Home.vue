@@ -66,14 +66,26 @@ export default {
           name: this.name,
           type: this.userType,
         });
-        this.windowRef = window.open(
-          "/chat",
-          "",
-          "width=400,height=600,left=200,top=200"
-        );
-        this.$router.resolve({
-          path: "/chat",
-        });
+        
+        if (this.userType === 'Agent') {
+          this.windowRef = window.open(
+            "/agent",
+            "",
+            ""
+          );
+          this.$router.resolve({
+            path: "/agent",
+          });
+        } else {
+          this.windowRef = window.open(
+            "/chat",
+            "",
+            "width=400,height=600,left=200,top=200"
+          );
+          this.$router.resolve({
+            path: "/chat",
+          });
+        }
       }
     },
     customSelect() {
