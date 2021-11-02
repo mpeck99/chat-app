@@ -71,16 +71,17 @@ export default {
           this.windowRef = window.open(
             "/agent",
             "",
-            ""
+            "width=900,height=600"
           );
           this.$router.resolve({
             path: "/agent",
+            
           });
         } else {
           this.windowRef = window.open(
             "/chat",
             "",
-            "width=400,height=600,left=200,top=200"
+            "width=400,height=600"
           );
           this.$router.resolve({
             path: "/chat",
