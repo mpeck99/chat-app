@@ -60,11 +60,11 @@ io.on("connection", function(socket) {
   socket.emit('connected', users)
   // io.emit('connected', users);
   socket.on('send', function(data) {
-      io.to('chat').emit('message', data);
+      io.to(socket.id).emit('message', data);
   });
 
   socket.on("typing", function(data) {
-     io.to('chat').emit("typing", data);
+     io.to(socket.id).emit("typing", data);
   });
 
   socket.on('join', function(data){
