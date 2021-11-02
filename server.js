@@ -72,4 +72,9 @@ io.on("connection", function(socket) {
       io.to(socket.id).emit('join', data);
 
   });
+  socket.on('agent', function(data){
+    socket.join(data);
+    console.log('Agent has joined');
+    io.to(data).emit('join', 'Agent has joined. One moment and they will be with you.')
+  })
 });
