@@ -1,12 +1,13 @@
 <template>
-  <div class="wrapper">
-    <h1>Clients in chat</h1>
-    <ul>
-      <li v-for="user in users" :key="user.id">
-        <a @click="joinChat">{{user.name}}</a>
+  <div class="wrapper wrapper-agent">
+    <div class="sidebar">
+      <h1>Clients in chat</h1>
+      <ul class="client-list">
+        <li v-for="user in users" :key="user.id" >
+          <button @click="joinChat(user.id)" type="button">{{user.name}}</button>
         </li>
-    </ul>
-  </div>
+      </ul>
+    </div>
 </template>
 
 <script>
