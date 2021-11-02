@@ -112,20 +112,20 @@ export default {
     } else {
       this.bubbleClass = "chat-bubble--client";
     }
-    // socket.on("message", (data) => {
-    //   this.messages.push({
-    //     message: data,
-    //     user: this.type,
-    //     class: this.bubbleClass,
-    //   });
-    // });
+    socket.on("message", (data) => {
+      this.messages.push({
+        message: data,
+        user: this.type,
+        class: this.bubbleClass,
+      });
+    });
 
-    // socket.on("typing", (data) => {
-    //   let timer;
-    //   this.typing = data.typing;
-    //   clearTimeout(timer);
-    //   timer = setTimeout(this.notTyping, 2000);
-    // });
+    socket.on("typing", (data) => {
+      let timer;
+      this.typing = data.typing;
+      clearTimeout(timer);
+      timer = setTimeout(this.notTyping, 2000);
+    });
 
     // socket.on("connect", (data) => {
     //   this.connectedUsers.push(data);
@@ -133,22 +133,29 @@ export default {
     //     this.connectedUsers.push(data);
     //   });
 
-    //   socket.emit("join", this.username + " has joined the chat");
+    //   socket.emit("join", this.username + "is in the queue");
     // });
+    socket.on('connect', (data)=>{
+      this.connectedUsers.push(data);
+      socket.on("join", (data) => {
+        this.connectedUsers.push(data);
+      });
+      
+      socket.emit('join', this.username+' is in the queue');
+    })
+    
+     socket.on("queue", (data) => {
+        console.log(data);
+      });
+      socket.emit("queue", "You have been put into the queue");
+ 
 
-    //  socket.on("queue", (data) => {
-    //     console.log(data);
-    //   });
-    //   socket.emit("queue", "You have been put into the queue");
-    socket.emit("connected", {
+
+    socket.emit("users", {
       name: this.username,
       type: this.type,
     });
   
-    socket.emit("waiting", {
-      name: this.username,
-      msg: "You have been placed in the queue."
-    });
   },
 };
 </script>
