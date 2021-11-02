@@ -70,8 +70,8 @@ io.on("connection", function(socket) {
   socket.on('join', function(data){
       socket.join(socket.id);
       io.to(socket.id).emit('join', data);
-
   });
+
   socket.on('agent', function(data){
     socket.join(data);
     console.log('Agent has joined');
