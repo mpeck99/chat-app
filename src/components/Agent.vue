@@ -8,6 +8,7 @@
         </li>
       </ul>
     </div>
+    
     <div class="chat-wrapper">
       <div class="chat-body">
         <!-- <div
@@ -86,4 +87,76 @@ export default {
 </script>
 
 <style lang="scss">
+
+.wrapper-agent {
+  min-width: 100%;
+  min-height: 95%;
+
+  display: grid;
+  grid-template-columns: 25rem auto;
+  grid-template-rows: 100%;
+  justify-content: flex-start;
+
+  padding: 0;
+
+  .sidebar{
+    height: 95%;
+
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+
+    padding: 1.5rem;
+
+    background-color: var(--grey);
+  }
+
+  .client-list {
+    list-style-type: none;
+    padding-left: 0;
+    
+    li {
+      min-width: 100%;
+      
+      display: flex;
+      flex-direction: column;
+      
+      margin-left: -1.5rem;
+      margin-right: -1.5rem;
+
+      button {
+        padding: 1rem 2rem;
+
+        position: relative;
+
+        border-radius: 0;
+        border: 0;
+
+
+        &:hover, &:focus {
+          background-color: var(--white);
+        }
+
+        &:after {
+          content: '';
+
+          width: 90%;
+          height: 2px;
+
+          position: absolute;
+          left: 1rem;
+          bottom: 0rem;
+          
+          background-color: var(--grey);
+        }
+      }      
+    }
+  }
+
+  .chat-wrapper {
+    grid-column:  2 / 3;
+    grid-row:  1 / 2;
+  }
+}
 </style>
