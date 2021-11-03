@@ -67,6 +67,10 @@ io.on("connection", function(socket) {
      io.to(socket.id).emit("typing", data);
   });
 
+  socket.on('agent typing',function(data) {
+    io.to(socket.id).emit("typing", data);
+ });
+
   socket.on('join', function(data){
       socket.join(socket.id);
       io.to(socket.id).emit('join', data);
@@ -75,6 +79,10 @@ io.on("connection", function(socket) {
   socket.on('agent', function(data){
     socket.join(data);
     console.log('Agent has joined');
-    io.to(data).emit('join', 'Agent has joined. One moment and they will be with you.')
+    io.to(data).emit('join', 'Agent has joined. They will be with you shortly.')
+  });
+
+  socket.on('agent send', function(data){
+    io.to(socket.id).emit('message', data);
   })
 });
