@@ -20,6 +20,7 @@ export default {
   --bluem: #015987;
   --blued: #015987;
   --grey:  #e3e3e2;
+  --greyD: #72726e;
   --white: #ffffff;
 }
 
