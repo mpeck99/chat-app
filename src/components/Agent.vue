@@ -11,7 +11,7 @@
     
     <div class="chat-wrapper">
       <div class="chat-body">
-        <!-- <div
+        <div
           class="chat-bubble"
           v-for="(msg, index) in messages"
           :key="index"
@@ -43,7 +43,7 @@
         <button type="submit" class="btn" value="Send" @click="sendMessage">
           Send
         </button>
-      </form> -->
+      </form>
     </div>
   </div>
 </template>
@@ -59,16 +59,47 @@ export default {
     return {
       users: [],
       socket: io(),
+      username: "",
+      type: "",
+      message: "",
+      messages: [],
+      bubbleClass: "",
+      typing: false,
+      typingContent: "",
     };
   },
 
   methods: {
     joinChat(user){
+      this.messages = [];
       this.socket.emit('agent', user);
+      console.log(this.target);
     },
-    sendMessage(){
-      console.log('something will happen eventually')
-    }
+     sendMessage(e) {
+      const messageInput = document.getElementById("message").value;
+      e.preventDefault();
+      if (messageInput) {
+        this.socket.emit("agent send", {
+          user: this.type,
+          message: this.message,
+          class: this.bubbleClass,
+          name: 'Agent',
+        });
+        this.message = "";
+      }
+      const inner = document.querySelector(".inner");
+      inner.lastChild.scrollIntoView();
+      window.scrollTo(0, document.querySelector(".chat-body").scrollHeight);
+    },
+    notTyping() {
+      this.typing = false;
+    },
+    isTyping(e) {
+      e.preventDefault();
+      this.socket.emit("typing", {
+        typing: true,
+      });
+    },
   },
   created() {
     this.socket.on('connected', (data)=>{
@@ -77,6 +108,28 @@ export default {
       }
     });
 
+    this.socket.on("message", (data) => {
+      this.messages.push({
+        message: data,
+        user: this.type,
+        class: this.bubbleClass,
+      });
+    });
+
+    this.socket.on("agent message", (data) => {
+      this.messages.push({
+        message: data,
+        user: this.type,
+        class: this.bubbleClass,
+      });
+    });
+
+    this.socket.on("agent typing", (data) => {
+      let timer;
+      this.typing = data.typing;
+      clearTimeout(timer);
+      timer = setTimeout(this.notTyping, 2000);
+    });
     // socket.on('disconnect', function(){
     //   this.users.pop(socket.id);
     //   console.log(this.users);
@@ -86,7 +139,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .wrapper-agent {
   min-width: 100%;
@@ -157,6 +210,77 @@ export default {
   .chat-wrapper {
     grid-column:  2 / 3;
     grid-row:  1 / 2;
+  }
+}
+
+.chat-bubble--agent {
+    max-width: 45%;
+
+  min-width: 4rem;
+
+  padding: 0.5rem 1rem;
+  margin: 2rem 1rem;
+
+  position: relative;
+
+  background: var(--grey);
+
+  p {
+    max-width: 100%;
+
+    margin: 0;
+
+    word-break: break-all;
+    text-align: right;
+  }
+
+  .name {
+    position: absolute;
+    bottom: -1.5rem;
+    right: 0;
+
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    font-family: var(--header-font);
+  }
+
+  &:after {
+    content: "";
+
+    width: 0;
+    height: 0;
+
+    position: absolute;
+    bottom: 0;
+    right: -1rem;
+
+    border-bottom: 1.25rem solid var(--grey);
+    border-right: 1.25rem solid transparent;
+  }
+}
+
+.chat-bubble--client {
+    align-self: flex-start;
+
+    background: var(--blue);
+
+    p {
+      text-align: left;
+      color: var(--grey);
+    }
+
+    .name {
+      left: 0;
+      right: auto;
+    }
+
+    &:after {
+      left: -1rem;
+      bottom: 0;
+
+      border-bottom: 1.25rem solid var(--blue);
+      border-left: 1.25rem solid transparent;
+      border-right: 0;
   }
 }
 </style>
