@@ -149,10 +149,9 @@ export default {
       });
       socket.emit("queue", "You have been put into the queue");
  
- socket.on('agent', function(data){
+  socket.on('agent', function(data){
     socket.join(data);
     console.log('Agent has joined');
-    io.to(data).emit('join', 'Agent has joined. One moment and they will be with you.')
   })
 
     socket.emit("users", {
