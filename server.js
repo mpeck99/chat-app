@@ -25,16 +25,6 @@ io.on("connection", function(socket) {
         name: data.name,
       });
       console.log(users);
-      // //adding user to a list to easily display
-      // for (let [id] of io.of("/").sockets) {
-      //   users.push({
-      //     userID: id,
-      //     username: data.name,
-      //   });
-      // }
-      
-
-      // io.to('waiting').emit("users",users);
       
       //adding the user to the waiting room
       socket.join(socket.id);
@@ -51,25 +41,18 @@ io.on("connection", function(socket) {
     console.log(socket.id + " has left");
     console.log(users);
   });
-
-/////
-////  Continue looking into emitting message to the user that is in the room that they are in the queue, then I will need to add a date/time to the user so Agents can see who was first, then look into looping through them on the agents page so an agent can select the user and start a private chat. - may need to look into socket.io for the private chat stuff
-////
  
   // socket.join('waiting-room');
   socket.emit('connected', users)
   // io.emit('connected', users);
   socket.on('send', function(data) {
-      io.to(socket.id).emit('message', data);
+    io.emit('message', data);
   });
 
   socket.on("typing", function(data) {
-     io.to(socket.id).emit("typing", data);
+     io.emit("typing", data);
+    
   });
-
-  socket.on('agent typing',function(data) {
-    io.to(socket.id).emit("typing", data);
- });
 
   socket.on('join', function(data){
       socket.join(socket.id);
@@ -79,10 +62,6 @@ io.on("connection", function(socket) {
   socket.on('agent', function(data){
     socket.join(data);
     console.log('Agent has joined');
-    io.to(data).emit('join', 'Agent has joined. They will be with you shortly.')
+    io.to(data).emit('agentJoin', "Agent has joined the chat.");
   });
-
-  socket.on('agent send', function(data){
-    io.to(socket.id).emit('message', data);
-  })
 });
