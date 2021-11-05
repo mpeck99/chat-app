@@ -8,7 +8,6 @@
         </li>
       </ul>
     </div>
-    
     <div class="chat-wrapper">
       <div class="chat-body">
         <div
@@ -66,28 +65,32 @@ export default {
       bubbleClass: "",
       typing: false,
       typingContent: "",
+      connectedUser: "",
     };
   },
 
   methods: {
     joinChat(user){
+      this.connectedUser = "";
       this.messages = [];
+
       this.socket.emit('agent', user);
-      console.log(this.target);
+      this.connectedUser = user;
     },
      sendMessage(e) {
       const messageInput = document.getElementById("message").value;
+      
       e.preventDefault();
       if (messageInput) {
-        this.socket.emit("agent send", {
-          user: this.type,
+        this.socket.emit("send", {
+          user: this.connectedUser,
           message: this.message,
           class: this.bubbleClass,
           name: 'Agent',
         });
         this.message = "";
       }
-      const inner = document.querySelector(".inner");
+      const inner = document.querySelector(".chat-wrapper");
       inner.lastChild.scrollIntoView();
       window.scrollTo(0, document.querySelector(".chat-body").scrollHeight);
     },
@@ -98,6 +101,7 @@ export default {
       e.preventDefault();
       this.socket.emit("typing", {
         typing: true,
+        user: this.connectedUser
       });
     },
   },
@@ -116,24 +120,12 @@ export default {
       });
     });
 
-    this.socket.on("agent message", (data) => {
-      this.messages.push({
-        message: data,
-        user: this.type,
-        class: this.bubbleClass,
-      });
-    });
-
-    this.socket.on("agent typing", (data) => {
+    this.socket.on("typing", (data) => {
       let timer;
       this.typing = data.typing;
       clearTimeout(timer);
       timer = setTimeout(this.notTyping, 2000);
     });
-    // socket.on('disconnect', function(){
-    //   this.users.pop(socket.id);
-    //   console.log(this.users);
-    // })
   },
 };
 
@@ -146,7 +138,7 @@ export default {
   min-height: 95%;
 
   display: grid;
-  grid-template-columns: 25rem auto;
+  grid-template-columns: 25rem 1fr;
   grid-template-rows: 100%;
   justify-content: flex-start;
 
@@ -208,13 +200,34 @@ export default {
   }
 
   .chat-wrapper {
+    height: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: auto;
+
+    position: relative;
     grid-column:  2 / 3;
     grid-row:  1 / 2;
   }
 }
 
+.chat-body {
+  width: 100%;
+  min-height: calc(100% - 4rem);
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  > :first-child {
+    margin-top: auto;
+  }
+}
+
 .chat-bubble--agent {
-    max-width: 45%;
+  max-width: 45%;
 
   min-width: 4rem;
 
