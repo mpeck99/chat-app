@@ -84,9 +84,11 @@ export default {
       if (messageInput) {
         this.socket.emit("send", {
           user: this.connectedUser,
+          agent: this.socket.id,
           message: this.message,
-          class: this.bubbleClass,
-          name: 'Agent',
+          class: 'chat-bubble--agent',
+          type: 'Agent',
+          name: 'Agent'
         });
         this.message = "";
       }
@@ -113,9 +115,16 @@ export default {
     });
 
     this.socket.on("message", (data) => {
+      this.bubbleClass = "chat-bubble--client";
+      //  if (data.type == "Agent") {
+      //   this.bubbleClass = "chat-bubble--agent";
+      // } else {
+      //   this.bubbleClass = "chat-bubble--client";
+      // }
+      
       this.messages.push({
         message: data,
-        user: this.type,
+        user: data.type,
         class: this.bubbleClass,
       });
     });
@@ -226,6 +235,52 @@ export default {
   }
 }
 
+.chat-bubble {
+  max-width: 80%;
+
+  min-width: 4rem;
+
+  padding: 0.5rem 1rem;
+  margin: 2rem 1rem;
+
+  position: relative;
+
+  background: var(--grey);
+
+  p {
+    max-width: 100%;
+
+    margin: 0;
+
+    word-break: break-all;
+    text-align: right;
+  }
+
+  .name {
+    position: absolute;
+    bottom: -1.5rem;
+    right: 0;
+
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    font-family: var(--header-font);
+  }
+
+  &:after {
+    content: "";
+
+    width: 0;
+    height: 0;
+
+    position: absolute;
+    bottom: 0;
+    right: -1rem;
+
+    border-bottom: 1.25rem solid var(--grey);
+    border-right: 1.25rem solid transparent;
+  }
+}
+
 .chat-bubble--agent {
   max-width: 45%;
 
@@ -279,7 +334,7 @@ export default {
 
     p {
       text-align: left;
-      color: var(--grey);
+      color: var(--white);
     }
 
     .name {
@@ -296,4 +351,6 @@ export default {
       border-right: 0;
   }
 }
+
+
 </style>
