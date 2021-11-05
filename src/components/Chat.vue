@@ -6,17 +6,15 @@
           class="chat-bubble"
           v-for="(msg, index) in messages"
           :key="index"
-          :class="msg.message.class"
+          :class="msg.class"
         >
-          <span class="name">{{ msg.message.name }}</span>
-          <p>{{ msg.message.message }}</p>
+          <span v-if="msg.message.name" class="name">{{
+            msg.message.name
+          }}</span>
+          <p v-if="msg.message.message">{{ msg.message.message }}</p>
+          <p v-else>{{ msg.message }}</p>
         </div>
       </div>
-      <ul class="users" v-if="connectedUsers">
-        <li v-for="(user, index) in connectedUsers" :key="index">
-          {{ user }}
-        </li>
-      </ul>
     </div>
     <form class="form-wrapper">
       <div :class="typing ? 'active' : ''" class="typing">
@@ -25,7 +23,7 @@
         <span></span>
       </div>
       <div class="form-group">
-        <label for="message">Message:</label>
+        <label for="message" class="sr-only">Message:</label>
         <textarea
           name="message"
           @keyup="isTyping"
@@ -36,10 +34,10 @@
           rows="10"
           v-model="message"
         ></textarea>
+        <button type="submit" class="btn" value="Send" @click="sendMessage">
+          Send
+        </button>
       </div>
-      <button type="submit" class="btn" value="Send" @click="sendMessage">
-        Send
-      </button>
     </form>
   </div>
 </template>
@@ -127,104 +125,103 @@ export default {
       timer = setTimeout(this.notTyping, 2000);
     });
 
-    // socket.on("connect", (data) => {
-    //   this.connectedUsers.push(data);
-    //   socket.on("join", (data) => {
-    //     this.connectedUsers.push(data);
-    //   });
-
-    //   socket.emit("join", this.username + "is in the queue");
-    // });
-    socket.on('connect', (data)=>{
+    socket.on("connect", (data) => {
       this.connectedUsers.push(data);
+
       socket.on("join", (data) => {
         this.connectedUsers.push(data);
-      });
-      
-      socket.emit('join', this.username+' is in the queue');
-    })
-    
-     socket.on("queue", (data) => {
+        let messageDisclaimer = {
+            message: this.username + " is in the queue",
+            class: "disclaimer",
+            user: this.type,
+          }
         console.log(data);
+        this.messages.push(messageDisclaimer);
       });
-      socket.emit("queue", "You have been put into the queue");
- 
-  socket.on('agent', function(data){
-    socket.join(data);
-    console.log('Agent has joined');
-  })
+      socket.on('agentJoin', (data)=>{
+         let messageDisclaimer = {
+            message: 'Agent has joined the chat.',
+            class: "disclaimer",
+            user: this.type,
+          }
+        console.log(data);
+        this.messages.push(messageDisclaimer);
+      })
+      socket.emit("join", data);
+    });
 
     socket.emit("users", {
       name: this.username,
       type: this.type,
     });
-  
   },
 };
 </script>
 
 <style lang="scss">
 .wrapper-chat {
-  max-width: 95%;
-  height: 90vh;
-
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: calc(100% - 8rem) 8rem;
-
-  position: relative;
+  max-height: calc(100% - 7rem);
+  height: 100%;
 
   .form-wrapper {
-    height: 100%;
-
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-
     position: relative;
 
     padding: 0;
 
     .form-group {
-      margin: 0;
-
       width: 100%;
 
+      margin: 0;
+
+      display: flex;
+      flex-direction: row;
+      
       .form-control {
         height: 4rem;
 
         padding: 0.75rem;
 
-        border: 1px solid var(--black);
+        border: 2px solid var(--grey);
 
         word-break: break-all;
         resize: none;
+
+        &:hover, &:focus {
+          border-color: var(--blue);
+        }
+      }
+
+      textarea {
+        border-right: 0;
       }
     }
 
     .btn {
       width: auto;
-      height: 5.6rem;
+      height: 5.75rem;
       padding: 0.5rem;
 
       border-radius: 0;
     }
   }
-}
 
-.inner {
-  min-height: calc(100% - 4rem);
-  height: 100%;
-  overflow: auto;
+  .inner {
+    height: 100%;
+    max-width: 85%;
+    width: 100%;
 
-  position: relative;
+    display: flex;
+
+    margin-bottom: 1rem;
+
+    overflow-y: auto;
+
+    position: relative;
+  }
 }
 
 .chat-body {
   width: 100%;
-  min-height: calc(100% - 4rem);
 
   display: flex;
   flex-direction: column;
@@ -236,7 +233,7 @@ export default {
 }
 
 .chat-bubble {
-  max-width: 45%;
+  max-width: 80%;
 
   min-width: 4rem;
 
@@ -280,6 +277,24 @@ export default {
     border-right: 1.25rem solid transparent;
   }
 
+  &.disclaimer {
+    max-width: 100%;
+
+    padding: 0;
+    margin-bottom: 0;
+
+    list-style-type: none;
+
+    background-color: transparent;
+    color: darken(#ebebeb, 50%);
+    font-style: italic;
+    font-size: 0.9rem;
+
+    &:after {
+      display: none;
+    }
+  }
+
   &.chat-bubble--agent {
     align-self: flex-start;
 
@@ -313,7 +328,8 @@ export default {
   display: none;
 
   position: absolute;
-  top: -0.5rem;
+  top: -2rem;
+  left: 40%;
 
   &.active {
     display: flex;
@@ -329,16 +345,5 @@ export default {
     border-radius: 50%;
     background: var(--grey);
   }
-}
-
-.users {
-  padding: 0;
-  margin-bottom: 0;
-
-  list-style-type: none;
-
-  color: darken(#ebebeb, 50%);
-  font-style: italic;
-  font-size: 0.9rem;
 }
 </style>
