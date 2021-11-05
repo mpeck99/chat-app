@@ -46,7 +46,13 @@ io.on("connection", function(socket) {
   socket.emit('connected', users)
   // io.emit('connected', users);
   socket.on('send', function(data) {
-    io.emit('message', data);
+    if(data.user) {
+      io.to(data.user).emit('message', data);
+    }
+    else {
+      io.to(data.socket).emit('message', data);
+    }
+    
   });
 
   socket.on("typing", function(data) {
