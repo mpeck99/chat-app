@@ -67,10 +67,11 @@ export default {
       e.preventDefault();
       if (messageInput) {
         socket.emit("send", {
-          user: this.type,
+          socket: socket.id,
           message: this.message,
-          class: this.bubbleClass,
+          class: 'chat-bubble--client',
           name: this.username,
+          type: this.type
         });
         this.message = "";
       }
@@ -105,12 +106,13 @@ export default {
       // ignore
     }
 
-    if (this.type == "Agent") {
+    
+    socket.on("message", (data) => {
+      if (data.type == "Agent") {
       this.bubbleClass = "chat-bubble--agent";
     } else {
       this.bubbleClass = "chat-bubble--client";
     }
-    socket.on("message", (data) => {
       this.messages.push({
         message: data,
         user: this.type,
@@ -158,7 +160,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .wrapper-chat {
   max-height: calc(100% - 7rem);
   height: 100%;
@@ -302,7 +304,7 @@ export default {
 
     p {
       text-align: left;
-      color: var(--grey);
+      color: var(--white);
     }
 
     .name {
