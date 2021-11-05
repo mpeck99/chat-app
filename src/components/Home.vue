@@ -126,16 +126,16 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .error-wrapper {
-  width: calc(100% - 3rem);
+  width: calc(100% - 8rem);
   min-height: 4rem;
 
   display: flex;
   align-items: center;
 
   position: absolute;
-  bottom: -4.25rem;
+  bottom: 4rem;
 
   padding: 0.25rem;
 
@@ -157,10 +157,10 @@ export default {
 
     list-style-type: none;
   }
-}
 
-.inner {
-  width: 80%;
+  @media (min-width:767px) {
+    bottom: 6rem;
+  }
 }
 
 .form-group {
@@ -168,57 +168,26 @@ export default {
 
   display: flex;
 
-  position: relative;
-
-  margin: 3.25rem 0 0 0;
-
-  label {
-    position: absolute;
-    top: -2.25rem;
-  }
+  margin: 3.5rem 0 0 0;
 
   input[type="text"] {
-    height: 2.5rem;
+    height: 3.5rem;
 
     flex-grow: 1;
 
     border-radius: 0;
     border: 2px solid var(--grey);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    font-family: var(--body-font);
+    font-size: 1.25rem;
 
-    box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
+    outline: none;
 
     &:hover,
     &:focus {
       border-color: var(--blue);
       border-radius: 0;
     }
-  }
-}
-
-.btn,
-input[type="submit"] {
-  width: 100%;
-  min-height: 2.5rem;
-
-  justify-self: flex-end;
-  align-self: flex-end;
-
-  padding: 1rem;
-  margin-top: 6rem;
-
-  border: none;
-  background-color: var(--blue);
-  box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
-
-  color: var(--grey);
-  font-weight: 700;
-  font-size: 1.25rem;
-
-  -webkit-appearance: none;
-
-  &:hover,
-  &:focus {
-    background-color: var(--blued);
   }
 }
 
@@ -230,6 +199,7 @@ input[type="submit"] {
   justify-content: center;
 
   margin-top: 2rem;
+  margin-bottom: 7rem;
 
   text-align: left;
 
@@ -255,10 +225,16 @@ input[type="submit"] {
 
       padding: 1rem;
 
-      box-shadow: 0 1px 4px rgba(150, 150, 150, 0.65);
-      background-color: var(--white);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);      background-color: var(--white);
       border: 2px solid var(--grey);
       color: var(--greyD);
+
+      font-size: 1.25rem;
+      font-family: var(--body-font);
+
+      &:hover, &:focus {
+        border-color: var(--blue);
+      }
     }
 
     &.checked {
