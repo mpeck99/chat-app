@@ -84,8 +84,9 @@ export default {
     },
     isTyping(e) {
       e.preventDefault();
-      socket.emit("typing", {
+       socket.emit("clientTyping", {
         typing: true,
+        agent: socket.id
       });
     },
     userJoined() {
@@ -120,7 +121,7 @@ export default {
       });
     });
 
-    socket.on("typing", (data) => {
+    socket.on("agentTyping", (data) => {
       let timer;
       this.typing = data.typing;
       clearTimeout(timer);
@@ -187,10 +188,6 @@ export default {
 
         word-break: break-all;
         resize: none;
-
-        &:hover, &:focus {
-          border-color: var(--blue);
-        }
       }
 
       textarea {
@@ -228,6 +225,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  padding-bottom: 1rem;
 
   > :first-child {
     margin-top: auto;
