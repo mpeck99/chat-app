@@ -4,7 +4,7 @@
       <h1>Clients in chat</h1>
       <ul class="client-list">
         <li v-for="user in users" :key="user.id" >
-          <button @click="joinChat(user.id)" type="button">{{user.name}}</button>
+          <button @click="joinChat(user.id)" type="button" :id="'client'+user.id" class="btn-user">{{user.name}}</button>
         </li>
       </ul>
     </div>
@@ -14,10 +14,13 @@
           class="chat-bubble"
           v-for="(msg, index) in messages"
           :key="index"
-          :class="msg.message.class"
+          :class="!msg.message.class ? msg.class : msg.message.class"
         >
-          <span class="name">{{ msg.message.name }}</span>
-          <p>{{ msg.message.message }}</p>
+         <span v-if="msg.message.name" class="name">{{
+            msg.message.name
+          }}</span>
+          <p v-if="msg.message.message">{{ msg.message.message }}</p>
+          <p v-else>{{ msg.message }}</p>
         </div>
       </div>
       <form class="form-wrapper">
@@ -50,10 +53,7 @@
 <script>
 import io from "socket.io-client";
 
-// var socket = io();
-
 export default {
-  // props: ["name", "userType"],
   data() {
     return {
       users: [],
@@ -66,15 +66,42 @@ export default {
       typing: false,
       typingContent: "",
       connectedUser: "",
+      user: '',
     };
   },
 
   methods: {
     joinChat(user){
-      this.connectedUser = "";
-      this.messages = [];
+      // this.messages = [];
 
-      this.socket.emit('agent', user);
+      const buttonList = document.querySelectorAll('.btn-user');
+      const button = document.querySelector("#client"+user);
+
+      if(!button.classList.contains('active')){
+        button.classList.add('active');
+      }
+      else {
+        buttonList.forEach(e => {
+          e.classList.remove('active');
+        });
+      }
+    const connectMsg = {
+        message: 'Chat started. Type message to begin.',
+        class: 'disclaimer'
+      }
+
+      console.log(connectMsg);
+
+      this.messages.push(connectMsg);
+      this.connectedUser = "";
+
+      const data =  {
+        user: user,
+        agentId: this.socket.id
+      }
+
+      this.socket.emit('agent', data);
+     
       this.connectedUser = user;
     },
      sendMessage(e) {
@@ -101,7 +128,7 @@ export default {
     },
     isTyping(e) {
       e.preventDefault();
-      this.socket.emit("typing", {
+      this.socket.emit("agentTyping", {
         typing: true,
         user: this.connectedUser
       });
@@ -116,11 +143,6 @@ export default {
 
     this.socket.on("message", (data) => {
       this.bubbleClass = "chat-bubble--client";
-      //  if (data.type == "Agent") {
-      //   this.bubbleClass = "chat-bubble--agent";
-      // } else {
-      //   this.bubbleClass = "chat-bubble--client";
-      // }
       
       this.messages.push({
         message: data,
@@ -129,7 +151,7 @@ export default {
       });
     });
 
-    this.socket.on("typing", (data) => {
+    this.socket.on("clientTyping", (data) => {
       let timer;
       this.typing = data.typing;
       clearTimeout(timer);
@@ -161,7 +183,7 @@ export default {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
 
-    padding: 1.5rem;
+    padding: 0.8rem;
 
     background-color: var(--grey);
   }
@@ -176,8 +198,8 @@ export default {
       display: flex;
       flex-direction: column;
       
-      margin-left: -1.5rem;
-      margin-right: -1.5rem;
+      margin-left: -0.8em;
+      margin-right: -0.8rem;
 
       button {
         padding: 1rem 2rem;
@@ -189,22 +211,13 @@ export default {
 
 
         &:hover, &:focus {
-          background-color: var(--white);
-        }
-
-        &:after {
-          content: '';
-
-          width: 90%;
-          height: 2px;
-
-          position: absolute;
-          left: 1rem;
-          bottom: 0rem;
-          
-          background-color: var(--grey);
+          background-color: darken(#e3e3e2, 15%);
         }
       }      
+    }
+
+    .active {
+      background-color: var(--white);
     }
   }
 
@@ -219,16 +232,30 @@ export default {
     position: relative;
     grid-column:  2 / 3;
     grid-row:  1 / 2;
+
+    .form-wrapper {
+      padding: 1rem;
+
+      textarea {
+        width: calc(100% - 1rem);
+        height: 8rem;;
+
+        border-radius: 0;
+        border: 2px solid var(--grey);
+      }
+    }
   }
 }
 
 .chat-body {
-  width: 100%;
+  width: calc(100% - 3.5rem);
   min-height: calc(100% - 4rem);
 
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  padding: 1.5rem;
 
   > :first-child {
     margin-top: auto;
@@ -279,6 +306,25 @@ export default {
     border-bottom: 1.25rem solid var(--grey);
     border-right: 1.25rem solid transparent;
   }
+
+   &.disclaimer {
+    max-width: 100%;
+
+    padding: 0;
+    margin-bottom: 0;
+
+    list-style-type: none;
+
+    background-color: transparent;
+    color: darken(#ebebeb, 50%);
+    font-style: italic;
+    font-size: 0.9rem;
+
+    &:after {
+      display: none;
+    }
+  }
+
 }
 
 .chat-bubble--agent {
@@ -352,5 +398,29 @@ export default {
   }
 }
 
+.typing {
+  height: 1rem;
+  width: 4rem;
 
+  display: none;
+
+  position: absolute;
+  bottom: 15rem;
+  left: 40%;
+
+  &.active {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  span {
+    width: 1rem;
+    height: 1rem;
+
+    display: block;
+
+    border-radius: 50%;
+    background: var(--grey);
+  }
+}
 </style>
