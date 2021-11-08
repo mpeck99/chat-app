@@ -128,16 +128,14 @@ export default {
 
 <style lang="scss" scoped>
 .error-wrapper {
-  width: calc(100% - 8rem);
   min-height: 4rem;
 
   display: flex;
   align-items: center;
 
-  position: absolute;
-  bottom: 4rem;
-
   padding: 0.25rem;
+  margin-top: -6rem;
+  margin-bottom: 1rem;
 
   color: darken(#c14b46, 10%);
   text-align: left;
@@ -156,10 +154,6 @@ export default {
     padding-left: 0;
 
     list-style-type: none;
-  }
-
-  @media (min-width:767px) {
-    bottom: 6rem;
   }
 }
 
@@ -180,14 +174,6 @@ export default {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
     font-family: var(--body-font);
     font-size: 1.25rem;
-
-    outline: none;
-
-    &:hover,
-    &:focus {
-      border-color: var(--blue);
-      border-radius: 0;
-    }
   }
 }
 
@@ -214,7 +200,7 @@ export default {
     width: 11.5rem;
 
     align-self: center;
-    margin: 0;
+    margin: 1rem 0;
 
     label {
       width: 100%;
@@ -225,7 +211,8 @@ export default {
 
       padding: 1rem;
 
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);      background-color: var(--white);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);      
+      background-color: var(--white);
       border: 2px solid var(--grey);
       color: var(--greyD);
 
