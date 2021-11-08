@@ -159,6 +159,10 @@ input[type="submit"] {
 
 textarea, input {
   outline: none;
+
+  &:hover, &:focus {
+    border-color: var(--blue);
+  }
 }
 
 .form-group {
