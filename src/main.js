@@ -9,6 +9,7 @@ import Agent from '@/components/Agent'
 Vue.use(VueRouter)
 Vue.config.productionTip = false
 
+// Creating the router for the different views
 const router = new VueRouter({
   mode: 'history',
   routes: [{
