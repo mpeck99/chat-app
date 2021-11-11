@@ -34,7 +34,7 @@
           rows="10"
           v-model="message"
         ></textarea>
-        <button type="submit" class="btn" value="Send" @click="sendMessage">
+        <button type="submit" class="btn" value="Send" @click="sendMessage" @keyup.enter="sendMessage">
           Send
         </button>
       </div>
@@ -62,9 +62,12 @@ export default {
     };
   },
   methods: {
+    // Function to send message to an agent
     sendMessage(e) {
+      // Storing the message input fields value into a variable
       const messageInput = document.getElementById("message").value;
       e.preventDefault();
+      // Checking to see if there is a message before sending
       if (messageInput) {
         socket.emit("send", {
           socket: socket.id,
@@ -75,13 +78,16 @@ export default {
         });
         this.message = "";
       }
+      // Need to work on this to make it stay at the bottom of the chat window
       const inner = document.querySelector(".inner");
       inner.lastChild.scrollIntoView();
       window.scrollTo(0, document.querySelector(".chat-body").scrollHeight);
     },
+    // Function to show no one is typing
     notTyping() {
       this.typing = false;
     },
+    // Typing function to emit that a user is typing on a key stroke
     isTyping(e) {
       e.preventDefault();
        socket.emit("clientTyping", {
@@ -98,6 +104,7 @@ export default {
   },
 
   created() {
+    // check to see if this can be removed belive that its old
     let data = {};
     try {
       data = JSON.parse(localStorage["data"]);
@@ -107,13 +114,14 @@ export default {
       // ignore
     }
 
-    
+    // Socket.io messaging -- check if the if/else can be removed might be old
     socket.on("message", (data) => {
       if (data.type == "Agent") {
       this.bubbleClass = "chat-bubble--agent";
     } else {
       this.bubbleClass = "chat-bubble--client";
     }
+    // Storing the data into the messages array to display to the user
       this.messages.push({
         message: data,
         user: this.type,
@@ -121,38 +129,49 @@ export default {
       });
     });
 
+  // Socket.io agent typing
     socket.on("agentTyping", (data) => {
+      // Creating a variable to store the typing boolean to display if the agent is typing to the client
       let timer;
       this.typing = data.typing;
       clearTimeout(timer);
       timer = setTimeout(this.notTyping, 2000);
     });
 
+  // Socket.io connection
     socket.on("connect", (data) => {
+      // On connection adding the users to a connected users list
       this.connectedUsers.push(data);
 
+      // Socket.io Join
       socket.on("join", (data) => {
         this.connectedUsers.push(data);
+
+        // Setting a message disclaimer to display to the user when they enter a chat
         let messageDisclaimer = {
             message: this.username + " is in the queue",
             class: "disclaimer",
             user: this.type,
           }
-        console.log(data);
+        // Storing that disclaimer into the message array
         this.messages.push(messageDisclaimer);
       });
+
+      // Socket.io agent join
       socket.on('agentJoin', (data)=>{
+        // Setting the message disclaimer to let a client know when an agent has joined the chat
          let messageDisclaimer = {
             message: 'Agent has joined the chat.',
             class: "disclaimer",
             user: this.type,
           }
-        console.log(data);
         this.messages.push(messageDisclaimer);
+        console.log(data);
       })
       socket.emit("join", data);
     });
 
+    // On connection emitting the user that has joined a chat so they can be dispayed on the agents end
     socket.emit("users", {
       name: this.username,
       type: this.type,
@@ -206,8 +225,7 @@ export default {
 
   .inner {
     height: 100%;
-    max-width: 85%;
-    width: 100%;
+    min-width: 100%;
 
     display: flex;
 
@@ -232,70 +250,7 @@ export default {
   }
 }
 
-.chat-bubble {
-  max-width: 80%;
-
-  min-width: 4rem;
-
-  padding: 0.5rem 1rem;
-  margin: 2rem 1rem;
-
-  position: relative;
-
-  background: var(--grey);
-
-  p {
-    max-width: 100%;
-
-    margin: 0;
-
-    word-break: break-all;
-    text-align: right;
-  }
-
-  .name {
-    position: absolute;
-    bottom: -1.5rem;
-    right: 0;
-
-    font-size: 0.9rem;
-    text-transform: capitalize;
-    font-family: var(--header-font);
-  }
-
-  &:after {
-    content: "";
-
-    width: 0;
-    height: 0;
-
-    position: absolute;
-    bottom: 0;
-    right: -1rem;
-
-    border-bottom: 1.25rem solid var(--grey);
-    border-right: 1.25rem solid transparent;
-  }
-
-  &.disclaimer {
-    max-width: 100%;
-
-    padding: 0;
-    margin-bottom: 0;
-
-    list-style-type: none;
-
-    background-color: transparent;
-    color: darken(#ebebeb, 50%);
-    font-style: italic;
-    font-size: 0.9rem;
-
-    &:after {
-      display: none;
-    }
-  }
-
-  &.chat-bubble--agent {
+.chat-bubble--agent {
     align-self: flex-start;
 
     background: var(--blue);
@@ -318,32 +273,10 @@ export default {
       border-left: 1.25rem solid transparent;
       border-right: 0;
     }
-  }
 }
 
 .typing {
-  height: 1rem;
-  width: 4rem;
-
-  display: none;
-
-  position: absolute;
-  top: -2rem;
-  left: 40%;
-
-  &.active {
-    display: flex;
-    justify-content: space-around;
-  }
-
-  span {
-    width: 1rem;
-    height: 1rem;
-
-    display: block;
-
-    border-radius: 50%;
-    background: var(--grey);
-  }
+  bottom: 6.5rem;
+  right: 0;
 }
 </style>
