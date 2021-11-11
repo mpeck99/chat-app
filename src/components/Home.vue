@@ -56,7 +56,7 @@
           <li v-for="(error, index) in errorMsgs" :key="index">{{ error }}</li>
         </ul>
       </div>
-      <input type="submit" value="Chat" @click="storeData" class="btn" />
+      <input type="submit" value="Chat" @click="storeData" @keyup.enter="storeData" class="btn" />
     </div>
   </div>
 </template>
@@ -73,47 +73,57 @@ export default {
   },
 
   methods: {
+    // Storing the data from the inputs to be sent over
     storeData(e) {
       e.preventDefault();
 
+      // Storing the name input into a variable
       const name = document.querySelector("#name").value;
-
+      // Clearing out the error messages array
       this.errorMsgs = [];
+      // Checking to see that the name isnt left blank, null or undefined
       if (name === null || name === undefined || name === "" || name === " ") {
+        // Adding an error to the array if it is
         this.errorMsgs.push("Please enter a name");
       } else {
         this.name = name;
       }
-      console.log(this.userType);
 
+      // Check to see if this is needed anymore pretty sure its not since things have changed
       if (this.errorMsgs.length == 0) {
         localStorage["data"] = JSON.stringify({
           name: this.name,
           type: this.userType,
         });
 
+        // If the user type is agent then it will open the agents view
         if (this.userType === "agent") {
           this.windowRef = window.open("/agent", "", "width=900,height=600");
           this.$router.resolve({
             path: "/agent",
           });
         } else {
+          // Opening the clients view if they arent an agent
           this.windowRef = window.open("/chat", "", "width=400,height=600");
           this.$router.resolve({
             path: "/chat",
           });
+
         }
       }
     },
+    
     addChecked(e) {
       const userType = e.target;
       const parent = userType.parentElement.parentElement;
       const allRadios = document.querySelectorAll('input[type="radio"]');
-
+      // checking to see which variable ic checked
       if (userType.checked) {
         if (!parent.classList.contains("checked")) {
+          // If it is checked its adding the checked class to style its parent 
           parent.classList.add("checked");
           this.userType = userType.value;
+          // Removing the class of checked from the other radio button(s)
           allRadios.forEach((element) => {
             if (element != userType) {
               element.parentElement.parentElement.classList.remove("checked");
@@ -229,6 +239,12 @@ export default {
         background-color: var(--blue);
         border: none;
         color: var(--white);
+      }
+
+      input[type="radio"] {
+        &:hover, &:focus {
+        border-color: var(--grey) !important;
+      }
       }
     }
 
