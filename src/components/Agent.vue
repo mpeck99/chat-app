@@ -79,7 +79,7 @@ export default {
 
   methods: {
     joinChat(user) {
-      // this.messages = [];
+      this.messages = [];
 
       // Variables to grab all the buttons and a specific button that is using the variable passed
       const buttonList = document.querySelectorAll(".btn-user");
