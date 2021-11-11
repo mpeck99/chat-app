@@ -177,6 +177,15 @@ export default {
       type: this.type,
     });
   },
+   watch: {
+    messages(){
+      const chatBody = document.querySelector('.chat-body');
+ 
+      setTimeout(function(){
+        chatBody.scrollTop = chatBody.scrollHeight; 
+      }, 10)
+    }
+  }
 };
 </script>
 

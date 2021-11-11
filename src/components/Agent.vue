@@ -4,12 +4,7 @@
       <h1>Clients in chat</h1>
       <ul class="client-list">
         <li v-for="user in users" :key="user.id">
-          <button
-            @click="joinChat(user.id)"
-            type="button"
-            :id="'client' + user.id"
-            class="btn-user"
-          >
+          <button @click="joinChat(user.id)"  type="button" :id="'client' + user.id" class="btn-user">
             {{ user.name }}
           </button>
         </li>
@@ -193,12 +188,10 @@ export default {
   watch: {
     messages(){
       const chatBody = document.querySelector('.chat-body');
-
-      chatBody.scrollTop = chatBody.scrollHeight;
-
-      console.log("scroll: " +chatBody.scrollHeight)
-      console.log("scroll and add: "+(chatBody.scrollHeight + 44));
-      
+ 
+      setTimeout(function(){
+        chatBody.scrollTop = chatBody.scrollHeight; 
+      }, 10)
     }
   }
 };
