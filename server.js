@@ -4,6 +4,7 @@ const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const users = [];
+const usersConnected = [];
 
 // Express to run the server
 app.use(express.static(__dirname + "/dist"));
@@ -18,6 +19,7 @@ http.listen(port, () => {
 // Socket.io connection
 io.on("connection", function(socket) {
   // Listening for the users connection and then checking to see what type of user is conencted to push the correct data. 
+
   socket.on("users", function(data) {
     //on connect checking if users not an agent
     if (data.type != "Agent") {
@@ -25,7 +27,6 @@ io.on("connection", function(socket) {
         id: socket.id,
         name: data.name,
       });
-      console.log(users);
       //adding the user to the waiting room to wait for an agent
       socket.join(socket.id);
     } else {
@@ -38,13 +39,12 @@ io.on("connection", function(socket) {
   socket.on("disconnect", function() {
     //on disconnect will remove the user from the users list
     users.pop(socket.id);
+    io.to(socket.id).emit('disconnected', socket.id);
+    usersConnected.pop(socket.id);
     console.log(socket.id + " has left");
-    console.log(users);
   });
  
-  // socket.join('waiting-room');
   socket.emit('connected', users)
-  // io.emit('connected', users);
 
   // Checking the variables to send message to the correct socket
   socket.on('send', function(data) {
@@ -63,13 +63,16 @@ io.on("connection", function(socket) {
 
   // Sending things over to the agent that the client is typing
   socket.on("clientTyping", function(data) {
-    console.log(data);
     io.to(data.agent).emit("clientTyping", data);
   });
 
   socket.on('join', function(data){
-      socket.join(socket.id);
-      io.to(socket.id).emit('join', data);
+    socket.join(socket.id);
+    io.to(socket.id).emit('join', data);  
+  });
+
+  socket.on('usersConnected', function(data){
+    io.sockets.emit('usersReload', data);
   });
 
   socket.on('agent', function(data){

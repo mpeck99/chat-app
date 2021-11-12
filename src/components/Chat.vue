@@ -141,20 +141,23 @@ export default {
   // Socket.io connection
     socket.on("connect", (data) => {
       // On connection adding the users to a connected users list
-      this.connectedUsers.push(data);
-
+      socket.emit('hey', '');
       // Socket.io Join
       socket.on("join", (data) => {
         this.connectedUsers.push(data);
-
         // Setting a message disclaimer to display to the user when they enter a chat
         let messageDisclaimer = {
-            message: this.username + " is in the queue",
-            class: "disclaimer",
-            user: this.type,
-          }
+          message: this.username + " is in the queue",
+          class: "disclaimer",
+          user: this.type,
+        }
         // Storing that disclaimer into the message array
         this.messages.push(messageDisclaimer);
+        const connectedUser =    {
+          id: socket.id,
+          name: this.username
+        }
+        socket.emit('usersConnected', connectedUser); 
       });
 
       // Socket.io agent join
@@ -168,7 +171,7 @@ export default {
         this.messages.push(messageDisclaimer);
         console.log(data);
       })
-      socket.emit("join", data);
+      socket.emit("join", data);    
     });
 
     // On connection emitting the user that has joined a chat so they can be dispayed on the agents end

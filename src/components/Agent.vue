@@ -148,7 +148,7 @@ export default {
         typing: true,
         user: this.connectedUser,
       });
-    },
+    }
   },
 
   created() {
@@ -163,7 +163,7 @@ export default {
       for (var i = 0; i < data.length; i++) {
         this.users.push(data[i]);
       }
-    })
+    });
 
     this.socket.on("message", (data) => {
       // Setting the bubble class so that the classes are sent back appropriately
@@ -183,6 +183,14 @@ export default {
       clearTimeout(timer);
       timer = setTimeout(this.notTyping, 2000);
     });
+
+    this.socket.on('disconnected', (data)=>{
+      this.messages.push({
+        message: 'Client disconnected',
+        class: 'disclaimer'
+      });
+      this.users.pop(data);
+    })
   },
 
   watch: {
@@ -192,7 +200,12 @@ export default {
       setTimeout(function(){
         chatBody.scrollTop = chatBody.scrollHeight; 
       }, 10)
-    }
+    },
+    users(){
+      this.socket.on('usersReload', (data)=>{
+        this.users.push(data);
+      });
+    },
   }
 };
 </script>
