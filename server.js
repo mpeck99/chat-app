@@ -16,12 +16,15 @@ http.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
+
 // Socket.io connection
 io.on("connection", function(socket) {
   // Listening for the users connection and then checking to see what type of user is conencted to push the correct data. 
 
+
   socket.on("users", function(data) {
     //on connect checking if users not an agent
+  
     if (data.type != "Agent") {
       users.push({
         id: socket.id,
@@ -29,10 +32,7 @@ io.on("connection", function(socket) {
       });
       //adding the user to the waiting room to wait for an agent
       socket.join(socket.id);
-    } else {
-      //if users is an agent will redirect to new page
-      console.log("Your an agent");
-    }
+    } 
   });
 
   // Need to work on this disconnect
@@ -77,7 +77,6 @@ io.on("connection", function(socket) {
 
   socket.on('agent', function(data){
     socket.join(data.user);
-    console.log('Agent has joined');
     io.to(data.user).emit('agentJoin', data);
   });
 });
