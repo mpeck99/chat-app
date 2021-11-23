@@ -25,7 +25,6 @@ export default {
 
 body,
 html {
-  height: 100%;
   width: 100%;
 
   display: flex;
@@ -40,6 +39,10 @@ html {
 
   box-sizing: border-box;
   background-color: var(--blue);
+
+  @media (min-width: 767px){
+    height: 100%;
+  }
 }
 
 h1,
@@ -83,32 +86,22 @@ input {
 }
 
 .wrapper {
-  max-width: 500px;
+  max-width: 600px;
   width: 100%;
-
-  max-height: 95%;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 
-  position: relative;
+  // position: relative;
 
-  padding: 1.5rem;
+  padding: 2rem;
 
   line-height: 1.75rem;
 
-  background: #fff;
+  background: var(--white);
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3);
-
-  text-align: center;
-
-  overflow-x: hidden;
-
-  .inner {
-    max-width: 85%;
-  }
 }
 
 .sr-only {

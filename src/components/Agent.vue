@@ -283,6 +283,7 @@ export default {
     grid-row: 1 / 2;
 
     .form-wrapper {
+      width: 90%;
       padding: 1rem;
 
       textarea {

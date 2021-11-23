@@ -139,6 +139,7 @@ export default {
 <style lang="scss" scoped>
 .error-wrapper {
   min-height: 4rem;
+  width: 100%;
 
   display: flex;
   align-items: center;
@@ -151,7 +152,6 @@ export default {
   text-align: left;
 
   background-color: lighten(#c14b46, 35%);
-  border-radius: 0.25rem;
 
   svg {
     width: 2rem;
@@ -286,4 +286,19 @@ export default {
     justify-content: space-between;
   }
 }
+
+.inner {
+  height: 100%;
+  width: 90%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 767px){
+    width: 70%;
+  }
+}
+
 </style>

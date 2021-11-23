@@ -1,19 +1,17 @@
 <template>
   <div class="wrapper wrapper-chat">
-    <div class="inner">
-      <div class="chat-body">
-        <div
-          class="chat-bubble"
-          v-for="(msg, index) in messages"
-          :key="index"
-          :class="msg.class"
-        >
-          <span v-if="msg.message.name" class="name">{{
-            msg.message.name
-          }}</span>
-          <p v-if="msg.message.message">{{ msg.message.message }}</p>
-          <p v-else>{{ msg.message }}</p>
-        </div>
+    <div class="chat-body">
+      <div
+        class="chat-bubble"
+        v-for="(msg, index) in messages"
+        :key="index"
+        :class="msg.class"
+      >
+        <span v-if="msg.message.name" class="name">{{
+          msg.message.name
+        }}</span>
+        <p v-if="msg.message.message">{{ msg.message.message }}</p>
+        <p v-else>{{ msg.message }}</p>
       </div>
     </div>
     <form class="form-wrapper">
@@ -49,6 +47,7 @@ var socket = io();
 
 export default {
   props: ["name", "userType", "id"],
+
   data() {
     return {
       username: "",
@@ -60,47 +59,48 @@ export default {
       typingContent: "",
       connectedUsers: [],
     };
-  },
+  },  
+  
   methods: {
-    // Function to send message to an agent
-    sendMessage(e) {
-      // Storing the message input fields value into a variable
-      const messageInput = document.getElementById("message").value;
-      e.preventDefault();
-      // Checking to see if there is a message before sending
-      if (messageInput) {
-        socket.emit("send", {
-          socket: socket.id,
-          message: this.message,
-          class: 'chat-bubble--client',
-          name: this.username,
-          type: this.type
+      // Function to send message to an agent
+      sendMessage(e) {
+        // Storing the message input fields value into a variable
+        const messageInput = document.getElementById("message").value;
+        e.preventDefault();
+        // Checking to see if there is a message before sending
+        if (messageInput) {
+          socket.emit("send", {
+            socket: socket.id,
+            message: this.message,
+            class: 'chat-bubble--client',
+            name: this.username,
+            type: this.type
+          });
+          this.message = "";
+        }
+        // Need to work on this to make it stay at the bottom of the chat window
+        const inner = document.querySelector(".inner");
+        inner.lastChild.scrollIntoView();
+        window.scrollTo(0, document.querySelector(".chat-body").scrollHeight);
+      },
+      // Function to show no one is typing
+      notTyping() {
+        this.typing = false;
+      },
+      // Typing function to emit that a user is typing on a key stroke
+      isTyping(e) {
+        e.preventDefault();
+        socket.emit("clientTyping", {
+          typing: true,
+          agent: socket.id
         });
-        this.message = "";
-      }
-      // Need to work on this to make it stay at the bottom of the chat window
-      const inner = document.querySelector(".inner");
-      inner.lastChild.scrollIntoView();
-      window.scrollTo(0, document.querySelector(".chat-body").scrollHeight);
-    },
-    // Function to show no one is typing
-    notTyping() {
-      this.typing = false;
-    },
-    // Typing function to emit that a user is typing on a key stroke
-    isTyping(e) {
-      e.preventDefault();
-       socket.emit("clientTyping", {
-        typing: true,
-        agent: socket.id
-      });
-    },
-    userJoined() {
-      socket.emit("join", {
-        name: this.username,
-        msg: " has joined the chat.",
-      });
-    },
+      },
+      userJoined() {
+        socket.emit("join", {
+          name: this.username,
+          msg: " has joined the chat.",
+        });
+      },
   },
 
   created() {
@@ -141,9 +141,9 @@ export default {
   // Socket.io connection
     socket.on("connect", (data) => {
       // On connection adding the users to a connected users list
-      socket.emit('hey', '');
       // Socket.io Join
       socket.on("join", (data) => {
+  
         this.connectedUsers.push(data);
         // Setting a message disclaimer to display to the user when they enter a chat
         let messageDisclaimer = {
@@ -174,13 +174,20 @@ export default {
       socket.emit("join", data);    
     });
 
+    socket.on('disconnected', ()=>{
+      this.messages.push({
+        message: 'Agent disconnected',
+        class: 'disclaimer'
+      });
+    })
     // On connection emitting the user that has joined a chat so they can be dispayed on the agents end
     socket.emit("users", {
       name: this.username,
       type: this.type,
     });
   },
-   watch: {
+  
+  watch: {
     messages(){
       const chatBody = document.querySelector('.chat-body');
  
@@ -194,21 +201,26 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper-chat {
-  max-height: calc(100% - 7rem);
-  height: 100%;
+  min-height: calc(100% - 7rem);
+  height: 100vh;
+
+  padding: 0;
 
   .form-wrapper {
+    width: 90%;
     position: relative;
 
     padding: 0;
+    margin-bottom: 1rem;
 
     .form-group {
       width: 100%;
 
       margin: 0;
 
-      display: flex;
-      flex-direction: row;
+      display: grid;
+      grid-template-rows: 100%; 
+      grid-template-columns: 1fr 3.9rem;
       
       .form-control {
         height: 4rem;
@@ -251,11 +263,14 @@ export default {
 
 .chat-body {
   width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   padding-bottom: 1rem;
+
+  overflow-y: auto;
 
   > :first-child {
     margin-top: auto;
@@ -291,4 +306,5 @@ export default {
   bottom: 6.5rem;
   right: 0;
 }
+
 </style>
