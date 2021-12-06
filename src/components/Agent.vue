@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper wrapper-agent">
-    <div class="sidebar">
-      <h1>Clients in chat</h1>
+    <div class="sidebar" @click="grow">
+      <h1>Clients in chat: <span>{{users.length}}</span></h1>
       <ul class="client-list">
         <li v-for="user in users" :key="user.id">
           <button @click="joinChat(user.id)"  type="button" :id="'client' + user.id" class="btn-user">
@@ -148,6 +148,22 @@ export default {
         typing: true,
         user: this.connectedUser,
       });
+    }, 
+
+    grow(){
+      const sidebar = document.querySelector('.sidebar');
+      if(window.innerWidth < 767){
+         if(sidebar.classList.contains('active')){
+          sidebar.classList.add('close');
+          setTimeout(function(){
+            sidebar.classList.remove('active');
+            sidebar.classList.remove('close');
+          }, 1000)
+        }
+        else {
+          sidebar.classList.add('active');
+        }
+      }
     }
   },
 
@@ -211,28 +227,98 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .wrapper-agent {
   min-width: 100%;
-  min-height: 95%;
+  height: 100%;
 
-  display: grid;
-  grid-template-columns: 25rem 1fr;
-  grid-template-rows: 100%;
-  justify-content: flex-start;
-
+  display: block;
   padding: 0;
 
+  position: relative;
+
+  overflow: hidden;
+
   .sidebar {
-    height: 95%;
+    height: 5rem;
+    width: 100%;
 
     display: flex;
     flex-direction: column;
     grid-column: 1 / 2;
-    grid-row: 1 / 2;
+    grid-row: 2 / 3;
 
-    padding: 0.8rem;
+    position: absolute;
+    bottom: 0;
 
     background-color: var(--grey);
+    text-align: center;
+
+    cursor: pointer;
+
+    z-index: 2;
+
+    h1 {
+      margin-top: 2rem;
+    }
+
+    &.active {
+      animation: open 1s forwards ease-in;
+
+      &:before {
+        animation: bounceDown 3s infinite ease-in;
+
+      }
+    }
+
+    &.close {
+      animation: close 1s forwards ease-in;
+    }
+
+    &:before {
+      content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='25' height='25' viewBox='0 0 24 24' fill='none' stroke='%2372726e' stroke-width='2' stroke-linecap='butt' stroke-linejoin='arcs'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+
+      width: 2rem;
+      height: 2rem;
+
+      display: block;
+      position: absolute;
+      left: 50%;
+
+      animation: bounceUp 3s infinite ease-in;
+      transform: none;
+    }
+
+    &:hover, &:focus {
+      h1 {
+        color: var(--blued);
+        
+        @media (min-width: 767px) {
+          color: var(--black);
+        }
+      }
+
+      
+    }
+
+
+
+    @media (min-width: 767px){
+      height: 100%;
+      width: auto;
+
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+
+      position: relative;
+      bottom: 0;
+
+      cursor: none;
+
+      &:before {
+        display: none;
+      }
+    }
   }
 
   .client-list {
@@ -244,9 +330,6 @@ export default {
 
       display: flex;
       flex-direction: column;
-
-      margin-left: -0.8em;
-      margin-right: -0.8rem;
 
       button {
         padding: 1rem 2rem;
@@ -269,21 +352,22 @@ export default {
   }
 
   .chat-wrapper {
-    height: 100%;
+    width: 100%;
+    height: calc(100% - 5rem);
 
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 21rem 1fr;
-    justify-content: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
 
     overflow: auto;
 
     position: relative;
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
+
+    margin-top: auto;
 
     .form-wrapper {
-      width: 90%;
       padding: 1rem;
 
       textarea {
@@ -294,24 +378,40 @@ export default {
         border: 2px solid var(--grey);
       }
     }
+
+    @media (min-width: 767px){
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
+  }
+
+  @media (min-width: 767px){
+    width: 100%;
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 21rem 1fr;
+    justify-content: flex-end;
   }
 }
 
 .chat-body {
-  width: calc(100% - 3.5rem);
-  height: 16rem;
+  height: 100%;
+  width: auto;
 
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
 
   padding: 1.5rem 1.5rem 0 1.5rem;
   margin-bottom: 0.75rem;
-
   overflow: auto;
 
   > :first-child {
     margin-top: auto;
+  }
+
+  @media(min-width: 767px){
+    width: 90%
   }
 }
 
@@ -324,6 +424,7 @@ export default {
   margin: 2rem 1rem;
 
   position: relative;
+  align-self: flex-end;
 
   background: var(--grey);
 
@@ -386,8 +487,54 @@ export default {
   }
 }
 
+.form-wrapper {
+  width: 89%;
+}
+
 .typing {
   left: 1.25rem;
   bottom: 16rem;
+}
+
+@keyframes bounceUp {
+  0% {
+    transform: translateY(0) rotate(180deg);
+  }
+  50% {
+    transform: translateY(-0.25rem) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0) rotate(180deg);
+  }
+}
+
+@keyframes bounceDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(0.25rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes open {
+  0% {
+    height: 5rem;
+  }
+  100% {
+    height: 100%;
+  }
+}
+
+@keyframes close {
+  0% {
+    height: 100%;
+  }
+  100% {
+    height: 5rem;
+  }
 }
 </style>
