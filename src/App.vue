@@ -26,6 +26,7 @@ export default {
 body,
 html {
   width: 100%;
+  height: 100%;
 
   display: flex;
   justify-content: center;
@@ -39,10 +40,6 @@ html {
 
   box-sizing: border-box;
   background-color: var(--blue);
-
-  @media (min-width: 767px){
-    height: 100%;
-  }
 }
 
 h1,
